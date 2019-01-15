@@ -1,0 +1,39 @@
+<html style="text-align: center;" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>System do obsługi biblioteki konstruktów</title>
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous" />
+</head>
+
+<body>
+	<div align="center">
+
+		<nav class="navbar navbar-dark bg-dark">
+			<div class="container">
+				<h2 class="navbar-brand">
+					Plasmids Library <span id="the-title" layout:fragment="pageTitle" />
+				</h2>
+      			 <span class="navbar-text" th:if="${session.userLogin}" >Logged as: <span th:text="${session.userLogin}" /> 
+      			 	<form class="border border-primary rounded custom-form" action="Logout" method="get">
+		       			<button type="submit" class="btn btn-primary">Logout</button>
+		       		</form>
+      			 </span>
+
+				
+			</div>
+		</nav>
+
+		<div layout:fragment="content">
+	
+		</div>
+
+	</div>
+
+	<hr />
+	<div class="container" style="text-align: center">(c) AM</div>
+</body>
+</html>
