@@ -6,16 +6,23 @@
 	<session-factory>
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
+		
+		<property name="dialect">ikifp.plasmik.persistence.SQLiteDialect</property>
+		<property name="connection.driver_class">org.sqlite.JDBC</property>
+		<property name="connection.url">jdbc:sqlite:plasmik.db</property>
+		<property name="connection.username"></property>
+		<property name="connection.password"></property>
+		<property name="hibernate.hbm2ddl.auto">create</property>
 
-		<property name="connection.driver_class">org.postgresql.Driver</property>
+<!-- 		<property name="connection.driver_class">org.postgresql.Driver</property>
 		<property name="connection.url">jdbc:postgresql://127.0.0.1:5432/plasmik</property>
 		<property name="connection.username">plamik-admin</property>
 		<property name="connection.password">qqq</property>
 		<property name="hibernate.hbm2ddl.auto">create</property>
-		<!-- JDBC connection pool (use the build-in) -->
+		JDBC connection pool (use the build-in)
 		<property name="connection.pool_size">1</property>
-		<!-- SQL dialect -->
-		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		SQL dialect
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property> -->
 
 
  		<mapping class="ikifp.plasmik.model.User" />
