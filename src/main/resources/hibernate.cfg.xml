@@ -12,9 +12,9 @@
 		<property name="connection.username">plamik-admin</property>
 		<property name="connection.password">qqq</property>
 		<property name="hibernate.hbm2ddl.auto">create</property>
-		JDBC connection pool (use the build-in)
+		<!-- JDBC connection pool (use the build-in) -->		
 		<property name="connection.pool_size">1</property>
-		SQL dialect
+		<!-- SQL dialect-->		
 		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property> 
 
 
