@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+
+    <div layout:fragment="content">
+		<div th:include="menuFragment"></div>
+		
+		<h5 class="text-info">Projects list</h5>
+		<div class="container">
+		<table  class="table table-striped table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th>name</th>
+						<th>owner</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user: ${usersDtoList}">
+						<td><span th:text="${user.name}" /></td>
+						<td><span th:text="${user.Admin}" /></td>
+						<td>
+							<div class="form-group">
+								<form class="pull-left" action="DeleteUser" method="DELETE">
+									<input type="hidden" name="userId" th:value="${user.id}" />
+									<button class="btn btn-warning" type="submit">Delete</button>
+								</form>
+								<form class="pull-right" action="EditUser" method="POST">
+									<input type="hidden" name="userId" th:value="${user.id}" />
+									<button class="btn btn-info" type="submit">Edit</button>
+								</form>
+							</div>
+
+						</td> 
+						
+					</tr>
+				</tbody>
+			</table>		
+			</div>
+    </div>
+
+</body>
+</html>
