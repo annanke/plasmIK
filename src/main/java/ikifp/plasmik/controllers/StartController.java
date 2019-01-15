@@ -16,7 +16,7 @@ public class StartController {
 		return "start";
 	}
 	
-	@RequestMapping(value= {"/", "/Start"}, method=RequestMethod.POST)
+	@RequestMapping(value= {"/Start"}, method=RequestMethod.POST)
 	public String doLogin(@RequestParam(value="login") String login, Model model, HttpSession session) {
 		session.setAttribute("userLogin", login);
 		return "redirect:/Welcome";
