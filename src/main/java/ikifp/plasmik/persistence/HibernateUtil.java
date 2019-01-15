@@ -9,8 +9,11 @@ public class HibernateUtil {
 	
 	static {
 		try{
+			
 			AnnotationConfiguration ac = new AnnotationConfiguration().configure();
-			ac.setProperty("hibernate.connection.url", System.getenv("JDBC_DATABASE_URL"));
+			if (System.getenv("JDBC_DATABASE_URL")!=null) {
+				ac.setProperty("hibernate.connection.url", System.getenv("JDBC_DATABASE_URL"));
+			}
 			sessionFactory = ac.buildSessionFactory();
 		}
 		catch(Exception e) {
