@@ -20,7 +20,7 @@ import ikifp.plasmik.services.UserService;
 public class UserController {
 	
 	@RequestMapping(value="/users", method=RequestMethod.GET)
-	private String getAll(Model model, HttpSession session) {
+	public String getAll(Model model, HttpSession session) {
 		UserService userService = new UserService();
 		Collection<User> usersList = userService.getAll();
 		ArrayList<UserDto> usersDtoList = new ArrayList();
@@ -34,12 +34,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/users", method=RequestMethod.POST)
-	private String addUser(@RequestBody User user, Model model, HttpSession session) {
+	public String addUser(@RequestBody User user, Model model, HttpSession session) {
 		UserService userService = new UserService();
 		userService.addUser(user);
 		model.addAttribute("message", "user created");
 		return "users";
 	}
 	
-
+	@RequestMapping(value="/showAddUserForm",  method=RequestMethod.GET)
+	public String showAddUserForm() {
+		return "addUserForm";
+	}
 }

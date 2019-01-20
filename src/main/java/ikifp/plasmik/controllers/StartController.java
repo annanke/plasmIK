@@ -53,12 +53,12 @@ public class StartController {
 	}
 	
 	@RequestMapping(value="/RegisterForm", method=RequestMethod.GET)
-	private String showRegistrationForm(Model model, HttpSession session) {
+	public String showRegistrationForm(Model model, HttpSession session) {
 		return "registerForm";
 	}
 	
 	@RequestMapping(value="/ForgotData", method=RequestMethod.GET)
-	private String showForgotDataForm(Model model, HttpSession session) {
+	public String showForgotDataForm(Model model, HttpSession session) {
 		return "forgotData";
 	}
 }
