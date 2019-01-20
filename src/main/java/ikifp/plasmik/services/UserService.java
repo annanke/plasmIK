@@ -29,7 +29,7 @@ public class UserService {
 		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
 		User foundUser = null;
 		for (User user : usersList) {
-			if (user.getLogin().equals(login)) {
+			if (user.getLogin()!=null && user.getLogin().equals(login)) {
 				foundUser=user;
 			}
 		}

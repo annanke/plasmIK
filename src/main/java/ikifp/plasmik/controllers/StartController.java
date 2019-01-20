@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ikifp.plasmik.services.LoginService;
+
 @Controller
 public class StartController {
 	
@@ -26,7 +28,18 @@ public class StartController {
 	@RequestMapping(value={"/Welcome"}, method=RequestMethod.GET)
 	public String displayWelcome(Model model, HttpSession session) {
 //		if ((session.getAttribute("userLogin")!="" && session.getAttribute("userPassword")!="")) {
-		if ((session.getAttribute("userLogin")!="" && session.getAttribute("userPassword")!="")) {
+		LoginService loginService =new LoginService();
+		String userLogin = session.getAttribute("userLogin").toString();
+		
+		System.out.println("-------------------------------------");
+		System.out.println(userLogin);
+		System.out.println(session.getAttribute("userPassword").toString());
+		System.out.println(loginService.confirmLogin(userLogin));
+		System.out.println(loginService.confirmUserPassword(userLogin, session.getAttribute("userPassword").toString()));
+
+		System.out.println("-------------------------------------");
+		
+		if (loginService.confirmLogin(userLogin) && loginService.confirmUserPassword(userLogin, session.getAttribute("userPassword").toString())) {
 
 			model.addAttribute("message", "Witamy w systemie do zarządzania biblioteką plazmidów");
 			return "welcome";

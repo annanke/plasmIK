@@ -17,9 +17,9 @@ public class LoginService {
 	public boolean confirmLogin(String login) {
 		boolean isLoginConfirmed = false;
 		UserService userService = new UserService();
-		User user = userService.findUserByLogin(login);
+		User foundUser = userService.findUserByLogin(login);
 		
-		if (user.getLogin().equals(login)) {
+		if (foundUser!=null && foundUser.getLogin()!=null && foundUser.getLogin().equals(login)) {
 			isLoginConfirmed=true;
 		}
 		return isLoginConfirmed;
