@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ikifp.plasmik.services.LoginService;
+import ikifp.plasmik.services.UserService;
 
 @Controller
 public class StartController {
@@ -20,39 +21,35 @@ public class StartController {
 	
 	@RequestMapping(value= {"/Start"}, method=RequestMethod.POST)
 	public String doLogin(@RequestParam(value="login") String login, @RequestParam(value="password") String password, Model model, HttpSession session) {
-		session.setAttribute("userLogin", login);
-		session.setAttribute("userPassword", password);
-		return "redirect:/Welcome";
+		LoginService loginService = new LoginService();
+		UserService userService = new UserService();
+		
+		if (loginService.confirmUserLoginAndPassword(login, password)) {
+			session.setAttribute("userDto", userService.findUserByLogin(login));
+			return "redirect:/Welcome";
+		}
+		model.addAttribute("message", "Niepoprawne logowanie");
+		return "start";
 	}
 	
 	@RequestMapping(value={"/Welcome"}, method=RequestMethod.GET)
 	public String displayWelcome(Model model, HttpSession session) {
-//		if ((session.getAttribute("userLogin")!="" && session.getAttribute("userPassword")!="")) {
-		LoginService loginService =new LoginService();
-		String userLogin = session.getAttribute("userLogin").toString();
-		
-		System.out.println("-------------------------------------");
-		System.out.println(userLogin);
-		System.out.println(session.getAttribute("userPassword").toString());
-		System.out.println(loginService.confirmLogin(userLogin));
-		System.out.println(loginService.confirmUserPassword(userLogin, session.getAttribute("userPassword").toString()));
-
-		System.out.println("-------------------------------------");
-		
-		if (loginService.confirmLogin(userLogin) && loginService.confirmUserPassword(userLogin, session.getAttribute("userPassword").toString())) {
-
+		if (session.getAttribute("userDto")!=null) {
 			model.addAttribute("message", "Witamy w systemie do zarządzania biblioteką plazmidów");
 			return "welcome";
-		}else {
-			model.addAttribute("message", "Niepoprawne logowanie");
-			return "start";
 		}
+		else {
+			return "redirect:/Start";
+		}
+
 	}
 	
 	@RequestMapping(value={"/Logout"}, method=RequestMethod.GET)
-	public String logout(Model model) {
-//		model.addAttribute("message", "Dziękujemy za skorzystanie z plazmiIK");
-		return "redirect:/Start";
+	public String logout(Model model, HttpSession session) {
+		//session.removeAttribute("userDto");
+		session.invalidate();
+		model.addAttribute("message", "Dziękujemy za skorzystanie z plazmiIK");
+		return "start";
 	}
 	
 	@RequestMapping(value={"/Register"}, method=RequestMethod.GET)

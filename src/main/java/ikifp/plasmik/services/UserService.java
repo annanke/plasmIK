@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 
 import ikifp.plasmik.model.User;
 import ikifp.plasmik.persistence.DatabaseConnector;
+import ikifp.plasmik.persistence.dto.UserDto;
 
 public class UserService {
 	
@@ -25,15 +26,14 @@ public class UserService {
 		transaction.commit();
 	}
 
-	public User findUserByLogin(String login) {
+	public UserDto findUserByLogin(String login) {
 		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
-		User foundUser = null;
 		for (User user : usersList) {
 			if (user.getLogin()!=null && user.getLogin().equals(login)) {
-				foundUser=user;
+				return new UserDto(user);
 			}
 		}
-		return foundUser;
+		return null;
 	}
 	
 	public User findUserByEmail(String email) {

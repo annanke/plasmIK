@@ -1,5 +1,7 @@
 package ikifp.plasmik.persistence.dto;
 
+import ikifp.plasmik.model.User;
+
 public class UserDto {
 	
 	private long id;
@@ -11,6 +13,14 @@ public class UserDto {
 	private String email;
 	
 	private boolean isadmin;
+	
+	public UserDto(User user) {
+		this.setId(user.getId());
+		this.setEmail(user.getEmail());
+		this.setName(user.getName());
+		this.setLogin(user.getLogin());
+		this.setIsadmin(user.getIsadmin());
+	}
 
 	public long getId() {
 		return id;

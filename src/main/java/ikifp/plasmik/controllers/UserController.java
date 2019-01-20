@@ -25,12 +25,7 @@ public class UserController {
 		Collection<User> usersList = userService.getAll();
 		ArrayList<UserDto> usersDtoList = new ArrayList();
 		for (User user : usersList) {
-			UserDto userDto = new UserDto();
-			userDto.setId(user.getId());
-			userDto.setEmail(user.getEmail());
-			userDto.setName(user.getName());
-			userDto.setLogin(user.getLogin());
-			userDto.setIsadmin(user.getIsadmin());
+			UserDto userDto = new UserDto(user);
 			usersDtoList.add(userDto);
 		}
 		model.addAttribute("usersDtoList", usersDtoList);
