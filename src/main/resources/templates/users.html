@@ -20,7 +20,7 @@
 				<tbody>
 					<tr th:each="user: ${usersDtoList}">
 						<td><span th:text="${user.name}" /></td>
-						<td><span th:text="${user.Admin}" /></td>
+						<td><span th:text="${user.isadmin}" /></td>
 						<td>
 							<div class="form-group">
 								<form class="pull-left" action="DeleteUser" method="DELETE">

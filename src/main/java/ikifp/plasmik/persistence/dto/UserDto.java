@@ -6,9 +6,11 @@ public class UserDto {
 	
 	private String name;
 	
+	private String login;
+	
 	private String email;
 	
-	private boolean isAdmin;
+	private boolean isadmin;
 
 	public long getId() {
 		return id;
@@ -26,6 +28,14 @@ public class UserDto {
 		this.name = name;
 	}
 
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -34,11 +44,11 @@ public class UserDto {
 		this.email = email;
 	}
 
-	public boolean isAdmin() {
-		return isAdmin;
+	public boolean getIsadmin() {
+		return isadmin;
 	}
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setIsadmin(boolean isadmin) {
+		this.isadmin = isadmin;
 	}
 }

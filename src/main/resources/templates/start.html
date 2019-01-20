@@ -10,9 +10,11 @@
 				<div class="jumbotron custom-margin-top">
 					<h1 class="display-4">Witaj w plasmIK!</h1>
 					<p class="lead">Zaloguj się, aby dodawać informacje o nowych konstruktach.</p>
+					<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #cc0'/></p>
 				</div>
-				<form class="border border-primary rounded px-2" action="Start" method="post">
-					<div class="form-group">
+				<div class="form-group border border-primary rounded px-2">
+					<form action="Start" method="post">
+					
 						<div class="w-50 m-3" align="left">
 							<label for="loginInput">Login</label>
 							<input type="text" name="login" value="" class="form-control" id="loginInput" placeholder="enter login"/>
@@ -21,9 +23,11 @@
 							<input type="text" name="password" value="" class="form-control" id="loginPasswd" placeholder="enter password"/>
 						</div>
 						
-						<button type="submit" class="btn btn-primary">Login</button>
-					</div>
-				</form>			
+						<button type="submit" class="btn btn-primary">Log in</button>
+					</form>
+					<a class="text-info"> Forgot login or password?</a>
+				</div>
+							
 			</div>
 			<div class="container">
 				<form class="border border-primary rounded" action="RegisterForm" method="get">

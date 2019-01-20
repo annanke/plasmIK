@@ -29,7 +29,8 @@ public class UserController {
 			userDto.setId(user.getId());
 			userDto.setEmail(user.getEmail());
 			userDto.setName(user.getName());
-			userDto.setAdmin(user.isAdmin());
+			userDto.setLogin(user.getLogin());
+			userDto.setIsadmin(user.getIsadmin());
 			usersDtoList.add(userDto);
 		}
 		model.addAttribute("usersDtoList", usersDtoList);

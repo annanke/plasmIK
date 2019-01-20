@@ -25,4 +25,28 @@ public class UserService {
 		transaction.commit();
 	}
 
+	public User findUserByLogin(String login) {
+		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
+		User foundUser = null;
+		for (User user : usersList) {
+			if (user.getLogin().equals(login)) {
+				foundUser=user;
+			}
+		}
+		return foundUser;
+	}
+	
+	public User findUserByEmail(String email) {
+		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
+		User foundUser = null;
+		for (User user : usersList) {
+			if (user.getEmail().equals(email)) {
+				foundUser=user;
+			}
+		}
+		return foundUser;
+	}
+	
+	
+
 }

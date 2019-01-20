@@ -18,6 +18,11 @@ public class User {
 	private String name;
 	
 	@Column
+	@Size(max = 100)
+	@NotNull
+	private String login;
+	
+	@Column
 	@Size(max = 200)
 	@NotNull
 	private String email;
@@ -27,7 +32,7 @@ public class User {
 	private String password;
 	
 	@Column
-	private boolean isAdmin;
+	private boolean isadmin;
 
 	//Gettery i settery:
 	public long getId() {
@@ -45,6 +50,15 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
 
 	public String getEmail() {
 		return email;
@@ -62,12 +76,12 @@ public class User {
 		this.password = password;
 	}
 
-	public boolean isAdmin() {
-		return isAdmin;
+	public boolean getIsadmin() {
+		return isadmin;
 	}
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
+	public void setIsadmin(boolean isadmin) {
+		this.isadmin = isadmin;
 	}
 	
 }

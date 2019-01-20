@@ -17,26 +17,33 @@ public class StartController {
 	}
 	
 	@RequestMapping(value= {"/Start"}, method=RequestMethod.POST)
-	public String doLogin(@RequestParam(value="login") String login, Model model, HttpSession session) {
+	public String doLogin(@RequestParam(value="login") String login, @RequestParam(value="password") String password, Model model, HttpSession session) {
 		session.setAttribute("userLogin", login);
+		session.setAttribute("userPassword", password);
 		return "redirect:/Welcome";
 	}
 	
 	@RequestMapping(value={"/Welcome"}, method=RequestMethod.GET)
 	public String displayWelcome(Model model, HttpSession session) {
-		model.addAttribute("message", "Witamy w systemie do zarządzania biblioteką plazmidów");
-		return "welcome";
+//		if ((session.getAttribute("userLogin")!="" && session.getAttribute("userPassword")!="")) {
+		if ((session.getAttribute("userLogin")!="" && session.getAttribute("userPassword")!="")) {
+
+			model.addAttribute("message", "Witamy w systemie do zarządzania biblioteką plazmidów");
+			return "welcome";
+		}else {
+			model.addAttribute("message", "Niepoprawne logowanie");
+			return "start";
+		}
 	}
 	
 	@RequestMapping(value={"/Logout"}, method=RequestMethod.GET)
 	public String logout(Model model) {
 //		model.addAttribute("message", "Dziękujemy za skorzystanie z plazmiIK");
-		return "start";
+		return "redirect:/Start";
 	}
 	
 	@RequestMapping(value={"/Register"}, method=RequestMethod.GET)
 	public String displayRegisterForm(Model model) {
-//		model.addAttribute("message", "Dziękujemy za skorzystanie z plazmiIK");
 		return "registerForm";
 	}
 }
