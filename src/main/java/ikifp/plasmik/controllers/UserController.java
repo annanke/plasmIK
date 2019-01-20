@@ -41,8 +41,5 @@ public class UserController {
 		return "users";
 	}
 	
-	@RequestMapping(value="/RegisterForm", method=RequestMethod.GET)
-	private String showRegistrationForm(Model model, HttpSession session) {
-		return "registerForm";
-	}
+
 }
