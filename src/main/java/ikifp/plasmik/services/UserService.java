@@ -26,27 +26,35 @@ public class UserService {
 		transaction.commit();
 	}
 
-	public UserDto findUserByLogin(String login) {
+	public UserDto findUserByEmail(String email) {
 		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
 		for (User user : usersList) {
-			if (user.getLogin()!=null && user.getLogin().equals(login)) {
+			if (user.getEmail()!=null && user.getEmail().equals(email)) {
 				return new UserDto(user);
 			}
 		}
 		return null;
 	}
-	
-	public User findUserByEmail(String email) {
+
+/*	public UserDto findUserById(long id) {
 		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
-		User foundUser = null;
 		for (User user : usersList) {
-			if (user.getEmail().equals(email)) {
-				foundUser=user;
+			if (user.getId()==id) {
+				return new UserDto(user);
 			}
 		}
-		return foundUser;
+		return null;
+	}*/
+
+	public void deleteUser(long id) {
+		User user = (User)connector.getSession().get(User.class, id);
+		if (user!=null) {
+			Transaction transaction = connector.getSession().beginTransaction();
+			
+			connector.getSession().delete(user);
+			transaction.commit();
+		}
 	}
-	
 	
 
 }

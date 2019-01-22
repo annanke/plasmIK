@@ -8,7 +8,7 @@ public class UserDto {
 	
 	private String name;
 	
-	private String login;
+/*	private String login;*/
 	
 	private String email;
 	
@@ -18,7 +18,7 @@ public class UserDto {
 		this.setId(user.getId());
 		this.setEmail(user.getEmail());
 		this.setName(user.getName());
-		this.setLogin(user.getLogin());
+		//this.setLogin(user.getLogin());
 		this.setIsadmin(user.getIsadmin());
 	}
 
@@ -38,13 +38,13 @@ public class UserDto {
 		this.name = name;
 	}
 
-	public String getLogin() {
+/*	public String getLogin() {
 		return login;
 	}
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
+	}*/
 
 	public String getEmail() {
 		return email;

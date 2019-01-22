@@ -17,10 +17,10 @@ public class User {
 	@NotNull
 	private String name;
 	
-	@Column
+/*	@Column
 	@Size(max = 100)
 	@NotNull
-	private String login;
+	private String login;*/
 	
 	@Column
 	@Size(max = 200)
@@ -51,13 +51,13 @@ public class User {
 		this.name = name;
 	}
 	
-	public String getLogin() {
+/*	public String getLogin() {
 		return login;
 	}
 
 	public void setLogin(String login) {
 		this.login = login;
-	}
+	}*/
 
 
 	public String getEmail() {

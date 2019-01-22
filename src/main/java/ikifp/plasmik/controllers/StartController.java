@@ -20,12 +20,12 @@ public class StartController {
 	}
 	
 	@RequestMapping(value= {"/Start"}, method=RequestMethod.POST)
-	public String doLogin(@RequestParam(value="login") String login, @RequestParam(value="password") String password, Model model, HttpSession session) {
+	public String doLogin(@RequestParam(value="email") String email, @RequestParam(value="password") String password, Model model, HttpSession session) {
 		LoginService loginService = new LoginService();
 		UserService userService = new UserService();
 		
-		if (loginService.confirmUserLoginAndPassword(login, password)) {
-			session.setAttribute("userDto", userService.findUserByLogin(login));
+		if (loginService.confirmUserEmailAndPassword(email, password)) {
+			session.setAttribute("userDto", userService.findUserByEmail(email));
 			return "redirect:/Welcome";
 		}
 		model.addAttribute("message", "Niepoprawne logowanie");
