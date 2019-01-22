@@ -4,7 +4,31 @@
 <body>
 
     <div layout:fragment="content"> 
-    	<p> add user </p>
+    	<h4 class="text-info"> add new user </h4>
+    		<div class="form-group border border-primary rounded px-2">
+				<form action="addUserForm" method="post">
+						<div class="w-50 m-3">
+							<label for="nameInput">Name</label>
+							<input type="text" name="name" value="" class="form-control" id="nameInput" placeholder="enter name"/>
+							<br/>
+							
+							<label for="loginInput">Login</label>
+							<input type="text" name="login" value="" class="form-control" id="loginInput" placeholder="enter login"/>
+							<br/>
+
+							<label for="loginPasswd">Password</label>
+							<input type="password" name="password" value="" class="form-control" id="loginPasswd" placeholder="enter password"/>
+							<br/>
+							
+							<label for="emailInput">e-mail</label>
+							<input type="text" name="email" value="" class="form-control" id="emailInput" placeholder="enter e-mail address"/>
+							<br/>
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Add user</button>
+					</form>
+					
+				</div>
     </div>
 </body>
 </html>

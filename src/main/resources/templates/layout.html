@@ -14,9 +14,9 @@
 
 		<nav class="navbar navbar-dark bg-dark">
 			<div class="container">
-				<h2 class="navbar-brand">
+				<a  href="/Welcome"><h2 class="navbar-brand" >
 					Plasmids Library <span id="the-title" layout:fragment="pageTitle" />
-				</h2>
+				</h2></a>
       			 <span class="navbar-text" th:if="${session.userDto}" >Logged as: <span th:text="${session.userDto.login}" /> 
       			 	<form class="border border-primary rounded custom-form" action="Logout" method="get">
 		       			<button type="submit" class="btn btn-primary">Logout</button>
