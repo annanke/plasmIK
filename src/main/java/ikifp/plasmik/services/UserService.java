@@ -36,16 +36,6 @@ public class UserService {
 		return null;
 	}
 
-/*	public UserDto findUserById(long id) {
-		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
-		for (User user : usersList) {
-			if (user.getId()==id) {
-				return new UserDto(user);
-			}
-		}
-		return null;
-	}*/
-
 	public void deleteUser(long id) {
 		User user = (User)connector.getSession().get(User.class, id);
 		if (user!=null) {
@@ -54,6 +44,16 @@ public class UserService {
 			connector.getSession().delete(user);
 			transaction.commit();
 		}
+	}
+
+	public void editUser(long id) {
+		User user = (User)connector.getSession().get(User.class, id);
+		if (user!=null) {
+			Transaction transaction = connector.getSession().beginTransaction();
+			
+			connector.getSession().update(user);
+			transaction.commit();
+		}		
 	}
 	
 

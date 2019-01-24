@@ -17,8 +17,8 @@
 				<a  href="/Welcome"><h2 class="navbar-brand" >
 					Plasmids Library <span id="the-title" layout:fragment="pageTitle" />
 				</h2></a>
-      			 <span class="navbar-text" th:if="${session.userDto}" >Logged as: <span th:text="${session.userDto.email}" /> 
-      			 	<form class="border border-primary rounded custom-form" action="Logout" method="get">
+      			 <span class="navbar-text d-inline" th:if="${session.userDto}" >Logged as: <span th:text="${session.userDto.email}" /> 
+      			 	<form class="custom-form d-inline p-2" action="Logout" method="get">
 		       			<button type="submit" class="btn btn-primary">Logout</button>
 		       		</form>
       			 </span>

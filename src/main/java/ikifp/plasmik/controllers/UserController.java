@@ -39,7 +39,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
+/*	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public String addUser(@RequestBody User user, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
@@ -51,7 +51,7 @@ public class UserController {
 			return "redirect:/Start";
 		}
 
-	}
+	}*/
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
 	public String deleteUser(@RequestParam(value="userId") long id, Model model, HttpSession session) {
@@ -64,18 +64,17 @@ public class UserController {
 		else {
 			return "redirect:/Start";
 		}
-
 	}
 
 	@RequestMapping(value = "/showAddUserForm", method = RequestMethod.GET)
-	public String showAddUserForm(Model model, HttpSession session) {
+	public String showAddUserForm(@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
+			model.addAttribute("message", message);
 			return "addUserForm";
 		}
 		else {
 			return "redirect:/Start";
 		}
-
 	}
 
 	@RequestMapping(value = "/addUserForm", method = RequestMethod.POST)
@@ -88,22 +87,48 @@ public class UserController {
 			Model model, HttpSession session) {
 		
 		if (session.getAttribute("userDto")!=null) {
-			User newUser = new User();
-			newUser.setName(name);
-			//newUser.setLogin(login);
-			newUser.setEmail(email);
-			newUser.setPassword(password);
-			
 			UserService userService = new UserService();
-			userService.addUser(newUser);
-			//model.addAttribute("message", "user created");
-			redirectAttributes.addAttribute("message", "user created");
-			//TODO : spr czy user istnieje w bazie i validacje 
+			if (userService.findUserByEmail(email)==null) {
+				User newUser = new User();
+				newUser.setName(name);
+				//newUser.setLogin(login);
+				newUser.setEmail(email);
+				newUser.setPassword(password);
+								
+				userService.addUser(newUser);
+				redirectAttributes.addAttribute("message", "user created");
+				return "redirect:/users";
+			}else {
+				redirectAttributes.addAttribute("message", "user with the given address: '"+email+"' already exists");
+				return "redirect:/showAddUserForm";
+			}
+		}
+		else {
+			return "redirect:/Start";
+		}
+	}
+	
+	@RequestMapping(value = "/showEditUserForm", method = RequestMethod.GET)
+	public String showEditUserForm(@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
+		if (session.getAttribute("userDto")!=null) {
+			model.addAttribute("message", message);
+			return "editUserForm";
+		}
+		else {
+			return "redirect:/Start";
+		}
+	}
+	
+	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
+	public String editUser(@RequestParam(value="userId") long id, Model model, HttpSession session) {
+		if (session.getAttribute("userDto")!=null) {
+			UserService userService = new UserService();
+			userService.editUser(id);
+			model.addAttribute("message", "user data updated");
 			return "redirect:/users";
 		}
 		else {
 			return "redirect:/Start";
 		}
-		
 	}
 }
