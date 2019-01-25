@@ -11,7 +11,7 @@
 		<property name="connection.url">jdbc:postgresql://127.0.0.1:5432/plasmik</property>
 		<property name="connection.username">plamik-admin</property>
 		<property name="connection.password">qqq</property>
-		<property name="hibernate.hbm2ddl.auto">create</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- JDBC connection pool (use the build-in) -->		
 		<property name="connection.pool_size">1</property>
 		<!-- SQL dialect-->		
