@@ -46,11 +46,23 @@ public class UserService {
 		}
 	}
 
-	public void editUser(long id) {
+	public UserDto findUserById(long id) {
+		Collection<User> usersList = connector.getSession().createCriteria(User.class).list();
+		for (User user : usersList) {
+			if (user.getId()==id) {
+				return new UserDto(user);
+			}
+		}
+		return null;
+	}
+
+	public void editUserData(long id, String name, String email, boolean role) {
 		User user = (User)connector.getSession().get(User.class, id);
 		if (user!=null) {
 			Transaction transaction = connector.getSession().beginTransaction();
-			
+			user.setEmail(email);
+			user.setName(name);
+			user.setIsadmin(role);
 			connector.getSession().update(user);
 			transaction.commit();
 		}		

@@ -39,19 +39,15 @@ public class UserController {
 		}
 	}
 	
-/*	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public String addUser(@RequestBody User user, Model model, HttpSession session) {
-		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
 			userService.addUser(user);
 			model.addAttribute("message", "user created");
 			return "users";
-		}
-		else {
-			return "redirect:/Start";
-		}
+	}
 
-	}*/
+	
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
 	public String deleteUser(@RequestParam(value="userId") long id, Model model, HttpSession session) {
@@ -109,8 +105,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/showEditUserForm", method = RequestMethod.GET)
-	public String showEditUserForm(@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
+	public String showEditUserForm(
+			@RequestParam(value="userId") long id, 
+			@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
+			UserService userService = new UserService();
+			model.addAttribute("userDto", userService.findUserById(id));
 			model.addAttribute("message", message);
 			return "editUserForm";
 		}
@@ -120,11 +120,16 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String editUser(@RequestParam(value="userId") long id, Model model, HttpSession session) {
+	public String editUser(
+			@RequestParam(value="userId") long id, 
+			@RequestParam(value="userName") String name,
+			@RequestParam(value="userEmail") String email,
+			@RequestParam(value="userRole", required=false) boolean role,
+			RedirectAttributes redirectAttributes, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
-			userService.editUser(id);
-			model.addAttribute("message", "user data updated");
+			userService.editUserData(id, name, email, role);
+			redirectAttributes.addAttribute("message", "user data updated");
 			return "redirect:/users";
 		}
 		else {

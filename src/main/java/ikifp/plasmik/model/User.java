@@ -22,7 +22,7 @@ public class User {
 	@NotNull
 	private String login;*/
 	
-	@Column
+	@Column(unique=true)
 	@Size(max = 200)
 	@NotNull
 	private String email;

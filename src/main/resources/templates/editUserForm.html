@@ -11,10 +11,12 @@
     	<p class="lead" th:unless="${message}"></p>
     	
     		<div class="form-group border border-primary rounded px-2">
-				<form action="addUserForm" method="post">
+				<form action="editUser" method="post">
 						<div class="w-50 m-3">
+							<input type="hidden" name="userId" th:value="${userDto.id}" />
+							
 							<label for="nameInput">Name</label>
-							<input type="text" name="name" value="" class="form-control" id="nameInput" placeholder="enter name"/>
+							<input type="text" name="userName" th:value="${userDto.name}" class="form-control" id="nameInput" />
 							<br/>
 							
 <!-- 						<label for="loginInput">Login</label>
@@ -22,8 +24,16 @@
 							<br/> -->
 							
 							<label for="emailInput">e-mail (login)</label>
-							<input type="text" name="email" value="" class="form-control" id="emailInput" placeholder="enter e-mail address"/>
+							<input type="text" name="userEmail" th:value="${userDto.email}" class="form-control" id="emailInput" />
 							<br/>
+										
+						 	<label for="roleInput">Change to admin: </label>
+							<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" >
+							
+<!-- 							 <label class="switch ">
+          <input type="checkbox" class="default">
+          <span class="slider round"></span>
+        </label> -->
 						
 						</div>
 						<button type="submit" class="btn btn-primary">Update</button>

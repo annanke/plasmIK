@@ -1,6 +1,8 @@
 package ikifp.plasmik.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="projects")
@@ -10,7 +12,9 @@ public class Project {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-	@Column
+	@Column(unique=true)
+	@Size(max = 100)
+	@NotNull
 	private String projectName;
 	
 	@ManyToOne
