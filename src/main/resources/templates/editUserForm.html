@@ -26,10 +26,10 @@
 							<label for="emailInput">e-mail (login)</label>
 							<input type="text" name="userEmail" th:value="${userDto.email}" class="form-control" id="emailInput" />
 							<br/>
-										
+							<div th:if="${session.userDto.isadmin}==true" >			
 						 	<label for="roleInput">Change to admin: </label>
 							<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" >
-							
+							</div>
 <!-- 							 <label class="switch ">
           <input type="checkbox" class="default">
           <span class="slider round"></span>
@@ -39,7 +39,7 @@
 						<button type="submit" class="btn btn-primary">Update</button>
 				</form>
 			</div>
-			<div class="form-group border border-primary rounded px-2">
+			<div class="form-group border border-primary rounded px-2" th:if="${session.userDto.email}==${userDto.email} or ${session.userDto.isadmin}==true" >
 				<form action="changePass" method="post">
 					
 						<div class="w-50 m-3">

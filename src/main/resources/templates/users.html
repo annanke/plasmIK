@@ -8,12 +8,13 @@
 		<!-- 		<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
  -->
 		<h5 class="text-info">Users list</h5>
-		<form action="showAddUserForm" method="GET">
+		<form action="showAddUserForm" method="GET" th:if="${session.userDto.isadmin}==true">
 			<button class="btn btn-info" type="submit">Add user</button>
-			<p class="lead" th:if="${message}">
-				<span th:text="${message}" style='color: #aa0' />
-			</p>
+
 		</form>
+		<p class="lead" th:if="${message}">
+				<span th:text="${message}" style='color: #aa0' />
+		</p>
 		<div class="container">
 			<table class="table table-striped table-hover">
 				<thead class="thead-dark">
@@ -32,11 +33,11 @@
 						<td>
 							<div class="form-group">
 
-								<form class="d-inline p-2" action="showEditUserForm" method="GET">
+								<form class="d-inline p-2" action="showEditUserForm" method="GET" >
 									<input type="hidden" name="userId" th:value="${user.id}" />
 									<button class="btn btn-info" type="submit">Edit</button>
 								</form>
-								<form class="d-inline p-2" action="deleteUser" method="POST">
+								<form class="d-inline p-2" action="deleteUser" method="POST" th:if="${session.userDto.isadmin}==true" >
 									<input type="hidden" name="userId" th:value="${user.id}" />
 									<button class="btn btn-warning" type="submit">Delete</button>
 								</form>
