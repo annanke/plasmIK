@@ -7,18 +7,54 @@
 		<div th:include="menuFragment"></div>
 		
 		<h5 class="text-info">Constructs list</h5>
+		
+		<form action="addConstructForm" method="GET">
+			<button class="btn btn-info" type="submit">Add construct</button>
+
+		</form>
+		<p class="lead" th:if="${message}">
+				<span th:text="${message}" style='color: #aa0' />
+		</p>
+		
 		<div class="container">
 		<table  class="table table-striped table-hover">
 				<thead class="thead-dark">
 					<tr>
-						<th>Plasmid name</th>
+						<th>Construct name</th>
 						<th>DNA origin</th>
-						<th>Project</th> 
-						<th>Details</th>
+						<th>Project</th>
+						<th>User</th>
+						<th>Date</th>  
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					
+					<tr th:each="construct: ${constructsList}">
+						<td><span th:text="${construct.constructName}" /></td>
+						<td><span th:text="${construct.originDNA}" /></td>
+						<td><span th:text="${construct.project.projectName}" /></td>
+						<td><span th:text="${construct.user.name}" /></td>
+						<td><span th:text="${#dates.format(construct.date, 'yyyy MMM dd')}" /></td>
+						<td>
+							<div class="form-group">
+
+	 							<form class="d-inline p-2" action="showDetails" method="GET" >
+									<input type="hidden" name="constructId" th:value="${construct.id}" />
+									<button class="btn btn-info" type="submit">Details</button>
+								</form>
+								
+								<form class="d-inline p-2" action="editConstructForm" method="GET" >
+									<input type="hidden" name="constructId" th:value="${construct.id}" />
+									<button class="btn btn-info" type="submit">Edit</button>
+								</form>
+								
+								<form class="d-inline p-2" action="deleteConstruct" method="POST" />
+									<input type="hidden" name="constructId" th:value="${construct.id}" />
+									<button class="btn btn-warning" type="submit">Delete</button>
+								</form> 
+							</div>
+						</td>
+					</tr>
 				</tbody>
 			</table>		
 			</div>

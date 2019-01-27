@@ -18,22 +18,21 @@
 							<label for="nameInput">Name</label>
 							<input type="text" name="userName" th:value="${userDto.name}" class="form-control" id="nameInput" />
 							<br/>
-							
-<!-- 						<label for="loginInput">Login</label>
-							<input type="text" name="login" value="" class="form-control" id="loginInput" placeholder="enter login"/>
-							<br/> -->
-							
+											
 							<label for="emailInput">e-mail (login)</label>
-							<input type="text" name="userEmail" th:value="${userDto.email}" class="form-control" id="emailInput" />
+							<input type="email" name="userEmail" th:value="${userDto.email}" class="form-control" id="emailInput" />
 							<br/>
 							<div th:if="${session.userDto.isadmin}==true" >			
 						 	<label for="roleInput">Change to admin: </label>
-							<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" >
-							</div>
-<!-- 							 <label class="switch ">
-          <input type="checkbox" class="default">
-          <span class="slider round"></span>
-        </label> -->
+							<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" /> 
+							       
+<!-- 	        					<div class="col-sm-5">
+	      							<button type="button" class="btn btn btn-toggle" data-toggle="button" th:aria-pressed="${userDto.isadmin}" autocomplete="off" id="roleInput">
+	        							<div class="handle"></div>
+	    							 </button>
+	   							</div>
+							</div> -->
+  
 						
 						</div>
 						<button type="submit" class="btn btn-primary">Update</button>
@@ -53,11 +52,14 @@
 							<input type="password" name="newPassword" value="" class="form-control" id="loginNewPasswd" placeholder="enter new password"/>
 							<br/>
 						</div>
-						<button type="submit" class="btn btn-primary">Change</button>
+						<button type="submit" class="btn btn-warning">Change password</button>
 				</form>
 					
 			</div>
 		</div>
     </div>
+    
+
+    
 </body>
 </html>

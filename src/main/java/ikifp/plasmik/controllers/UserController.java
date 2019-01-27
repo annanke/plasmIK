@@ -39,22 +39,21 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
+/*	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public String addUser(@RequestBody User user, Model model, HttpSession session) {
 			UserService userService = new UserService();
 			userService.addUser(user);
 			model.addAttribute("message", "user created");
 			return "users";
 	}
-
-	
+*/
 	
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String deleteUser(@RequestParam(value="userId") long id, Model model, HttpSession session) {
+	public String deleteUser(@RequestParam(value="userId") long id, RedirectAttributes redirectAttributes, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
-			userService.deleteUser(id);
-			model.addAttribute("message", "user deleted");
+			String deletionMessage = userService.deleteUser(id);
+			redirectAttributes.addAttribute("message", deletionMessage);
 			return "redirect:/users";
 		}
 		else {
@@ -110,7 +109,7 @@ public class UserController {
 			@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
-			model.addAttribute("userDto", userService.findUserById(id));
+			model.addAttribute("userDto", userService.findUserDtoById(id));
 			model.addAttribute("message", message);
 			return "editUserForm";
 		}
@@ -128,8 +127,8 @@ public class UserController {
 			RedirectAttributes redirectAttributes, Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			UserService userService = new UserService();
-			userService.editUserData(id, name, email, role);
-			redirectAttributes.addAttribute("message", "user data updated");
+			String editionResult = userService.editUserData(id, name, email, role);
+			redirectAttributes.addAttribute("message", editionResult);
 			return "redirect:/users";
 		}
 		else {

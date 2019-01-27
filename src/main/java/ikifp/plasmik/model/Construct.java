@@ -16,6 +16,10 @@ public class Construct {
 	
 	@Column
 	@NotNull
+	private String constructName;
+	
+	@Column
+	@NotNull
 	private String plazmidName;
 	
 	@Column
@@ -28,15 +32,29 @@ public class Construct {
 	
 	@Column
 	@NotNull
+	private String originDNA;
+	
+	@Column
+	@NotNull
 	private Date date;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@Column
+	@ManyToOne
+	@JoinColumn(name="project_id")
+	private Project project;
+	
+/*	@Column
 	private byte[] map;
 	
+	@Column
+	private byte[] sequenceFile;*/
+	
+	@Column
+	private String comment;
+		
 	//gettery settery:
 	
 	public long getId() {
@@ -47,6 +65,14 @@ public class Construct {
 		this.id = id;
 	}
 
+	public String getConstructName() {
+		return constructName;
+	}
+
+	public void setConstructName(String constructName) {
+		this.constructName = constructName;
+	}
+	
 	public String getPlazmidName() {
 		return plazmidName;
 	}
@@ -71,6 +97,14 @@ public class Construct {
 		this.primers = primers;
 	}
 
+	public String getOriginDNA() {
+		return originDNA;
+	}
+
+	public void setOriginDNA(String originDNA) {
+		this.originDNA = originDNA;
+	}
+
 	public Date getDate() {
 		return date;
 	}
@@ -87,12 +121,36 @@ public class Construct {
 		this.user = user;
 	}
 
-	public byte[] getMap() {
+/*	public byte[] getMap() {
 		return map;
 	}
 
 	public void setMap(byte[] map) {
 		this.map = map;
+	}
+
+	public byte[] getSequenceFile() {
+		return sequenceFile;
+	}
+
+	public void setSequenceFile(byte[] sequenceFile) {
+		this.sequenceFile = sequenceFile;
+	}*/
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 }

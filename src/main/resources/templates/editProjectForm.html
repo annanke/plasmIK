@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+
+    <div layout:fragment="content"> 
+    <div class="container">
+    	<h4 class="text-info"> add new user </h4>
+    	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
+    	<br/>
+    		<div class="form-group border border-primary rounded px-2">
+				<form action="editProjectForm" method="post">
+						<div class="w-50 m-3">
+							<input type="hidden" name="projectId" th:value="${project.id}" />
+							<label for="projectName">Project name</label>
+							<input type="text" name="projectName" th:value="${project.projectName}" class="form-control" id="projectName"/>
+							<br/>
+
+							<label for="projectOwner">Choose project's owner:</label>
+							<select class="form-control" name="ownerId" id="projectOwner">
+          						<option th:each="user: ${usersList}" th:value="${user.id}" th:text="${user.name}" th:selected="${user.id == project.user.id}"></option>
+        					</select>
+							
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Edit project</button>
+				</form>
+					
+			</div>
+    </div>
+    </div>
+</body>
+</html>
