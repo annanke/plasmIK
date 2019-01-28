@@ -27,4 +27,17 @@ public class ConstructService {
 		
 	}
 
+	public void deleteConstruct(long constructId) {
+		Construct construct = (Construct)connector.getSession().get(Construct.class, constructId);
+		Transaction transaction = connector.getSession().beginTransaction();
+		connector.getSession().delete(construct);
+		transaction.commit();
+		
+	}
+
+	public Construct findConstructById(long constructId) {
+		Construct construct = (Construct)connector.getSession().get(Construct.class, constructId);
+		return construct;
+	}
+
 }

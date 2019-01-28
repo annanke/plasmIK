@@ -23,7 +23,7 @@
 						<th>Construct name</th>
 						<th>DNA origin</th>
 						<th>Project</th>
-						<th>User</th>
+						<th>Author</th>
 						<th>Date</th>  
 						<th></th>
 					</tr>
@@ -38,7 +38,7 @@
 						<td>
 							<div class="form-group">
 
-	 							<form class="d-inline p-2" action="showDetails" method="GET" >
+	 							<form class="d-inline p-2" action="constructDetails" method="GET" >
 									<input type="hidden" name="constructId" th:value="${construct.id}" />
 									<button class="btn btn-info" type="submit">Details</button>
 								</form>

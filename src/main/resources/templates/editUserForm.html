@@ -22,10 +22,12 @@
 							<label for="emailInput">e-mail (login)</label>
 							<input type="email" name="userEmail" th:value="${userDto.email}" class="form-control" id="emailInput" />
 							<br/>
-							<div th:if="${session.userDto.isadmin}==true" >			
-						 	<label for="roleInput">Change to admin: </label>
-							<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" /> 
-							       
+							
+							<div th:if="${session.userDto.isadmin}==true" class="custom-control custom-checkbox mr-sm-2">			
+						 		
+								<input name="userRole" type="checkbox" th:checked="${userDto.isadmin}" id="roleInput" class="custom-control-input "/>
+								<label for="roleInput" class="custom-control-label pull-left">admin privileges</label> 
+							 </div>      
 <!-- 	        					<div class="col-sm-5">
 	      							<button type="button" class="btn btn btn-toggle" data-toggle="button" th:aria-pressed="${userDto.isadmin}" autocomplete="off" id="roleInput">
 	        							<div class="handle"></div>

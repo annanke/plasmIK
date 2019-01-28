@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+
+  <div layout:fragment="content">
+        
+	<div th:include="menuFragment"></div> 
+    <div class="container">
+    	<h4 class="text-info"> construct details </h4>
+    	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
+    	<br/>
+    	
+	    <div class="form-group border border-primary rounded px-2 text-left">
+	    	<p class="text-secondary">Construct name: <span th:text="${construct.constructName}" class="text-dark font-weight-bold"/></p>
+			<p class="text-secondary">Project: <span th:text="${construct.project.projectName}" class="text-dark font-weight-bold"/></p>
+			<p class="text-secondary">Prepared by: <span th:text="${construct.user.name}" class="text-dark font-weight-bold"/></p>
+			<p class="text-secondary">Created on: <span th:text="${#dates.format(construct.date, 'yyyy MMM dd')}" /></p>
+			<hr/>
+			<p class="text-secondary">DNA origin: <span th:text="${construct.originDNA}" class="text-dark font-weight-bold"/></p>
+			<p class="text-secondary">Insert sequence: <span th:text="${construct.insertSequence}" class="text-dark"/></p>
+			<p class="text-secondary">Cloned into plasmid: <span th:text="${construct.plazmidName}" class="text-dark"/></p>
+			<p class="text-secondary">Primers: <span th:text="${construct.primers}" class="text-dark"/></p>
+			<br/>
+			<p class="text-secondary">Additional information:<br/> <span th:text="${construct.comment}" class="text-dark"/></p>
+		</div>
+		<div>
+			<embed
+					th:src="'/constructDetails/'+${construct.id}+'/pdf/'+${construct.id}+'_map_'+${construct.constructName}+'.pdf'"
+					type="application/pdf" style="height: 500px; width: 100%" />
+		</div>				
+
+    </div>
+  </div>
+</body>
+</html>
