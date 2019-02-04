@@ -11,24 +11,89 @@
     	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
     	<br/>
     	
-	    <div class="form-group border border-primary rounded px-2 text-left">
-	    	<p class="text-secondary">Construct name: <span th:text="${construct.constructName}" class="text-dark font-weight-bold"/></p>
-			<p class="text-secondary">Project: <span th:text="${construct.project.projectName}" class="text-dark font-weight-bold"/></p>
-			<p class="text-secondary">Prepared by: <span th:text="${construct.user.name}" class="text-dark font-weight-bold"/></p>
-			<p class="text-secondary">Created on: <span th:text="${#dates.format(construct.date, 'yyyy MMM dd')}" /></p>
-			<hr/>
-			<p class="text-secondary">DNA origin: <span th:text="${construct.originDNA}" class="text-dark font-weight-bold"/></p>
-			<p class="text-secondary">Insert sequence: <span th:text="${construct.insertSequence}" class="text-dark"/></p>
-			<p class="text-secondary">Cloned into plasmid: <span th:text="${construct.plazmidName}" class="text-dark"/></p>
-			<p class="text-secondary">Primers: <span th:text="${construct.primers}" class="text-dark"/></p>
-			<br/>
-			<p class="text-secondary">Additional information:<br/> <span th:text="${construct.comment}" class="text-dark"/></p>
+	    <div class="container-fluid form-group border border-primary rounded px-2 ">
+	      <div class="row px-5 py-2">
+	    	<div class="text-left col-9">
+		    	<p class="text-secondary">Construct name: <span th:text="${construct.constructName}" class="text-dark font-weight-bold"/></p>
+				<p class="text-secondary">Project: <span th:text="${construct.project.projectName}" class="text-dark font-weight-bold"/></p>
+				<p class="text-secondary">Prepared by: <span th:text="${construct.user.name}" class="text-dark font-weight-bold"/></p>
+				<p class="text-secondary">Created on: <span th:text="${#dates.format(construct.date, 'yyyy MMM dd')}" /></p>
+				<hr/>
+				<p class="text-secondary">DNA origin: <span th:text="${construct.originDNA}" class="text-dark font-weight-bold"/></p>
+				<p class="text-secondary">Insert sequence: <br/> <span th:text="${construct.insertSequence}" class="text-dark"/></p>
+				<p class="text-secondary">Cloned into plasmid: <span th:text="${construct.plazmidName}" class="text-dark font-weight-bold"/></p>
+				<p class="text-secondary">Primers: <br/> <span th:text="${construct.primers}" class="text-dark"/></p>
+				<br/>
+				<p class="text-secondary">Additional information:<br/> <span th:text="${construct.comment}" class="text-dark"/></p>
+			</div>
+			<div class="center col-3">
+				<div class="col-sm-8">
+					<form action="editConstructForm" method="GET" >
+							<input type="hidden" name="constructId" th:value="${construct.id}" />
+							<button class="btn btn-info btn-block" type="submit">Edit</button>
+					</form>
+									
+					<form action="deleteConstruct" method="POST"  th:if="${session.userDto.isadmin}==true or ${construct.user.email}==${session.userDto.email}">
+							<input type="hidden" name="constructId" th:value="${construct.id}" />
+							<button class="btn btn-warning btn-block" type="submit">Delete</button>
+					</form>
+					<br/>
+				</div>
+				
+				<div class="pt-2" th:if="${seqFileExist}">
+					<p>Do you need a sequence?</p>
+					<form  action="downloadSequence" method="GET" class="col-sm-8">
+							<input type="hidden" name="constructId" th:value="${construct.id}" />
+							<button class="btn btn-info btn-block" type="submit">Download</button>
+					</form>
+				</div>
+				
+				<form action="addSequence" method="GET" th:unless="${seqFileExist}">
+					<p>Upload a sequence file</p>	
+					<div class="form-control">
+						<label class="btn btn-outline-secondary" for="file-selector">
+	   					 	<input id="file-selector" type="file" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)">
+	   				 		Browse
+						</label><br/>
+						<span class='label label-info' id="upload-file-info"></span>
+					</div>
+					<input type="hidden" name="constructId" th:value="${construct.id}" />
+					<button class="btn btn-info" type="submit">Upload</button>
+<!-- 				<div  th:unless="${seqFileExist}">
+						<input type="file" class="form-control" id="sequenceFile" name="sequenceFile" multiple="multiple"/>
+						
+						<input type="hidden" name="constructId" th:value="${construct.id}" />
+						<button class="btn btn-info col-sm-8" type="submit">Upload</button>
+					</div> -->
+				</form>				
+				
+			</div>
+		  </div>
 		</div>
-		<div>
-			<embed
+			<div th:if="${mapFileExist}">
+				<embed
 					th:src="'/constructDetails/'+${construct.id}+'/pdf/'+${construct.id}+'_map_'+${construct.constructName}+'.pdf'"
 					type="application/pdf" style="height: 500px; width: 100%" />
-		</div>				
+			</div>
+			<div th:unless="${mapFileExist}">
+			
+				<p class="text-info lead">Upload map</p>
+<!--	  		<label for="mapFile">Upload map (pdf):</label>
+				<input type="file" id="mapFile" name="mapFile" multiple="multiple" /> -->
+						
+				<form class="pt-4" action="addMapFile" method="GET" >
+					<div class="form-control col-sm-8">
+						<label class="btn btn-outline-secondary" for="map-selector">
+	   					 	<input id="map-selector" type="file" accept=".pdf" style="display:none" onchange="$('#upload-map-info').html(this.files[0].name)">
+	   				 		 Browse 
+						</label><br/>
+						<span class='label label-info' id="upload-map-info"></span>
+					</div>
+ 					<input type="hidden" name="constructId" th:value="${construct.id}" /> 		 
+					<button class="btn btn-info" type="submit">Add map</button>
+				</form>
+			</div>	
+			
 
     </div>
   </div>

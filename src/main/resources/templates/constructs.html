@@ -48,7 +48,7 @@
 									<button class="btn btn-info" type="submit">Edit</button>
 								</form>
 								
-								<form class="d-inline p-2" action="deleteConstruct" method="POST" />
+								<form class="d-inline p-2" action="deleteConstruct" method="POST" th:if="${session.userDto.isadmin}==true or ${construct.user.email}==${session.userDto.email}" >
 									<input type="hidden" name="constructId" th:value="${construct.id}" />
 									<button class="btn btn-warning" type="submit">Delete</button>
 								</form> 

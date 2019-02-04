@@ -33,7 +33,7 @@
 						<td>
 							<div class="form-group">
 
-								<form class="d-inline p-2" action="showEditUserForm" method="GET" >
+								<form class="d-inline p-2" action="showEditUserForm" method="GET" th:if="${session.userDto.isadmin}==true or ${user.email}==${session.userDto.email}">
 									<input type="hidden" name="userId" th:value="${user.id}" />
 									<button class="btn btn-info" type="submit">Edit</button>
 								</form>
