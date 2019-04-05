@@ -53,9 +53,30 @@ public class ConstructController {
 		}
 	}
 	
-	@RequestMapping(value="/addConstructForm", method=RequestMethod.GET)
-	private String showAddConstructForm(Model model, HttpSession session) {
+	@RequestMapping(value = "/constructForm", method = RequestMethod.GET)
+	public String showEditConstruct(Model model, HttpSession session,
+			@RequestParam(value = "constructId", required=false) Long constructId,
+			RedirectAttributes redirectAttributes){
 		if (session.getAttribute("userDto")!=null) {
+			
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			
+			if ( constructId != null) {
+				ConstructService constructService = new ConstructService();
+				Construct construct = constructService.findConstructById(constructId);
+				model.addAttribute("construct", construct);
+				model.addAttribute("creationDate", df.format(construct.getDate()).toString());
+				redirectAttributes.addAttribute("constructId", constructId);
+				
+			} else {
+				model.addAttribute("construct", null);
+				redirectAttributes.addAttribute("constructId", null);
+				
+				Calendar today = Calendar.getInstance();
+				Date todayDate = today.getTime();
+				model.addAttribute("creationDate", df.format(todayDate).toString());
+			}
+			
 			UserService userService = new UserService();
 			Collection<User> usersList = userService.getAll();
 			model.addAttribute("usersList", usersList);
@@ -63,20 +84,16 @@ public class ConstructController {
 			ProjectService projectService = new ProjectService();
 			Collection<Project> projectList = projectService.getAllProjects();
 			model.addAttribute("projectList", projectList);
-			
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Calendar today = Calendar.getInstance();
-			Date todayDate = today.getTime();
-			model.addAttribute("todayDate", df.format(todayDate).toString());
-			
-			return "addConstructForm";
-		}else {
+					
+		return "addOrEditConstruct";
+		} else {
 			return "redirect:/Start";
 		}
 	}
 	
-	@RequestMapping(value="/addConstructForm", method=RequestMethod.POST)
+	@RequestMapping(value="/constructForm", method=RequestMethod.POST)
 	private String addConstruct(
+			@RequestParam(value = "constructId", required=false) Long constructId,
 			@RequestParam(value = "constructName", required=true) String constructName,
 			@RequestParam(value = "projectId", required=false) long projectId,
 			@RequestParam(value = "userId", required=false) long userId,
@@ -89,38 +106,44 @@ public class ConstructController {
 			@RequestParam(value="mapFile", required=false) MultipartFile mapFile,
 			@RequestParam(value="sequenceFile", required=false) MultipartFile sequenceFile,
 			Model model, HttpSession session) {
+		
 		if (session.getAttribute("userDto")!=null) {
-			Construct newConstruct = new Construct();
+			
+			Construct construct = new Construct();
 			ConstructService constructService = new ConstructService();
 			ProjectService projectService = new ProjectService();
 			UserService userService = new UserService();
 			
-			//create new construct
-			newConstruct.setConstructName(constructName);
-			newConstruct.setProject(projectService.findProjectById(projectId));
-			newConstruct.setUser(userService.findUserById(userId));		
-			newConstruct.setPlazmidName(plazmidName);
-			newConstruct.setInsertSequence(insertSequence);
-			newConstruct.setOriginDNA(originDNA);
-			newConstruct.setPrimers(primers);
-			newConstruct.setComment(comment);
+			construct.setConstructName(constructName);
+			construct.setProject(projectService.findProjectById(projectId));
+			construct.setUser(userService.findUserById(userId));		
+			construct.setPlazmidName(plazmidName);
+			construct.setInsertSequence(insertSequence);
+			construct.setOriginDNA(originDNA);
+			construct.setPrimers(primers);
+			construct.setComment(comment);
 			
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				newConstruct.setDate((Date)format.parse(dateString));
+				construct.setDate((Date)format.parse(dateString));
 			} catch (ParseException e) {
 				 e.printStackTrace();
 				System.out.println("problem with date of construct");
 			}
 			
-			constructService.addConstruct(newConstruct);
-			
-			// adding gene map in pdf file - save on disk
+			if (constructId == null) {
+				constructService.addConstruct(construct);
+			} else {
+				construct.setId(constructId);
+				constructService.updateConstruct(construct);
+			}
+						
+			// adding gene map in pdf file 
 			try {
 				//TODO check if it is pdf file!
 				byte[] mapFileBytes = mapFile.getBytes();
 				if(mapFileBytes.length>0) {
-					Path path = Paths.get(pathInProject+((Long)newConstruct.getId()).toString()+"_map_"+constructName+".pdf");
+					Path path = Paths.get(pathInProject+((Long)construct.getId()).toString()+"_map_"+constructName+".pdf");
 					Files.write(path, mapFileBytes);
 				}
 			} catch (IOException e) {
@@ -129,7 +152,7 @@ public class ConstructController {
 			}
 			
 			// save on disk file with sequence
-			savingFile(sequenceFile, newConstruct);
+			savingFile(sequenceFile, construct);
 	        
 			return "redirect:/constructs";
 		}else {
@@ -215,19 +238,31 @@ public class ConstructController {
 	}
 	
 	@RequestMapping(value = "/addSequence", method = RequestMethod.GET)
-	public void addSequenceFile(Model model, HttpSession session,
+	public String addSequenceFile(
 			@RequestParam(value = "sequenceFile", required=false) MultipartFile sequenceFile,
-			@RequestParam(value = "constructId", required=true) long constructId){
-		ConstructService constructService = new ConstructService();
-		Construct construct = constructService.findConstructById(constructId);
-		savingFile(sequenceFile, construct);
-		 
+			@RequestParam(value = "constructId", required=true) long constructId,
+			Model model, HttpSession session,
+			RedirectAttributes redirectAttributes){
+		if (session.getAttribute("userDto")!=null) {
+			ConstructService constructService = new ConstructService();
+			Construct construct = constructService.findConstructById(constructId);
+			savingFile(sequenceFile, construct);
+			redirectAttributes.addAttribute("message", "sequence file added");
+			return "redirect:/constructDetails";
+		}else {
+			return "redirect:/Start";
+		}
 	}
 	
 	@RequestMapping(value = "/downloadSequence", method = RequestMethod.GET)
 	public void downloadSequenceFile(Model model, HttpSession session,
 			@RequestParam(value = "constructId", required=true) long constructId){
-		ConstructService constructService = new ConstructService();
-		Construct construct = constructService.findConstructById(constructId);
+		if (session.getAttribute("userDto")!=null) {
+			ConstructService constructService = new ConstructService();
+			Construct construct = constructService.findConstructById(constructId);
+			//TODO implement file downloading
+		}
 	}
+	
+
 }

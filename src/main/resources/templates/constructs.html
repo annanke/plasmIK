@@ -8,7 +8,7 @@
 		
 		<h5 class="text-info">Constructs list</h5>
 		
-		<form action="addConstructForm" method="GET">
+		<form action="constructForm" method="GET">
 			<button class="btn btn-info" type="submit">Add construct</button>
 
 		</form>
@@ -43,7 +43,7 @@
 									<button class="btn btn-info" type="submit">Details</button>
 								</form>
 								
-								<form class="d-inline p-2" action="editConstructForm" method="GET" >
+								<form class="d-inline p-2" action="constructForm" method="GET" >
 									<input type="hidden" name="constructId" th:value="${construct.id}" />
 									<button class="btn btn-info" type="submit">Edit</button>
 								</form>

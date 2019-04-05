@@ -3,7 +3,8 @@
       layout:decorator="layout">
 <body>
 
-    <div layout:fragment="content"> 
+  <div layout:fragment="content">
+    <div th:include="menuFragment"></div> 
     <div class="container">
     	<h4 class="text-info"> add new construct </h4>
     	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
@@ -15,13 +16,13 @@
 							<input type="text" name="constructName" value="" class="form-control" id="constructName" placeholder="enter name"/>
 							<br/>
 							
-							<label for="constructName">Choose project: </label>
+							<label for="constructProject">Choose project: </label>
 							<select class="form-control" name="projectId" id="project">
           						<option th:each="project: ${projectList}" th:value="${project.id}" th:text="${project.projectName}"></option>
         					</select>
 							<br/>
 							
-							<label for="constructName">Author: </label>
+							<label for="constructAuthor">Author: </label>
 							<select class="form-control" name="userId" id="constructAuthor">
           						<option th:each="user: ${usersList}" th:value="${user.id}" th:text="${user.name}" th:selected="${user.id == session.userDto.id}"></option>
         					</select>

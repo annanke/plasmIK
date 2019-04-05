@@ -1,0 +1,83 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+
+  <div layout:fragment="content"> 
+    <div th:include="menuFragment"></div>
+    <div class="container">
+    	<h4 class="text-info"> edit new construct </h4>
+    	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
+    	<br/>
+    		<div class="form-group border border-primary rounded px-2">
+				<form action="constructForm" method="post" enctype="multipart/form-data">
+						<div class="w-50 m-3">
+							<input type="hidden" name="constructId" th:value="${construct != null} ? ${construct.id}" />
+							<label for="constructName">Construct name</label>
+							<input type="text" name="constructName" th:value="${construct != null} ? ${construct.constructName} " class="form-control" id="constructName" 
+								placeholder="enter name"/>
+							<br/>
+							
+							<label for="constructProject">Choose project: </label>
+							<select class="form-control" name="projectId" id="project">
+          						<option th:each="project: ${projectList}" th:value="${project.id}" th:text="${project.projectName}"
+          						th:selected="${construct != null} ? ${construct.project.projectName}"></option>
+        					</select>
+							<br/>
+							
+							<label for="constructAthor">Author: </label>
+							<select class="form-control" name="userId" id="constructAuthor">
+          						<option th:each="user: ${usersList}" th:value="${user.id}" th:text="${user.name}" 
+          							th:selected="${construct != null} ? ${user.id == construct.user.id} : ${user.id == session.userDto.id}"></option>
+        					</select>
+        					<br/>
+        					
+        					<label for="date">Date:</label>
+							<input type="date" name="date" th:value="${creationDate}" class="form-control" id="date" />
+							<br/>
+        					
+        					<label for="insertSequence">Sequence of gene insert:</label>
+							<textarea name="insertSequence" class="form-control" id="insertSequence" 
+								placeholder="enter sequence" th:inline="text">[[${construct != null} ? ${construct.insertSequence}]]</textarea>
+							<br/>
+							        					     					
+							<label for="originDNA">DNA origin:</label>
+							<input name="originDNA" th:value="${construct != null} ?  ${construct.originDNA}" class="form-control" id="originDNA" placeholder="enter DNA origin"/>
+							<br/>
+							
+        					<label for="plazmidName">Vector used:</label>
+							<input type="text" name="plazmidName" th:value="${construct != null} ? ${construct.plazmidName}" class="form-control" id="plazmidName" 
+								placeholder="enter plazmid name"/>
+							<br/>
+													
+							<label for="primers">Primers:</label>
+							<input type="text" name="primers" th:value="${construct != null} ? ${construct.primers}" class="form-control" id="primers" placeholder="enter primers"/>
+							<br/>
+							
+							<label for="comment">Comment (location, resistance etc):</label>
+							<textarea name="comment" class="form-control" id="comment" 
+								placeholder="Location in lab: &#13;&#10;Antibiotic resistance:" 
+								th:inline="text">[[${construct != null} ? ${construct.comment}]]</textarea>
+							<br/>
+							
+							<hr/>
+							<p class="text-info lead">Upload files</p>
+							
+	  						<label for="mapFile">Upload map (pdf):</label>
+							<input type="file" id="mapFile" name="mapFile" multiple="multiple" />
+							<br/>
+							
+							<label for="sequenceFile" >Upload file with sequence:</label>
+							<input type="file" id="sequenceFile" name="sequenceFile" multiple="multiple" />
+							
+							
+						</div>
+						
+						<button type="submit" class="btn btn-primary">Save construct</button>
+				</form>
+					
+			</div>
+    </div>
+    </div>
+</body>
+</html>

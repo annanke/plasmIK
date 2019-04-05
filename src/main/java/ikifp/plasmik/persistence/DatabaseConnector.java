@@ -15,6 +15,10 @@ public class DatabaseConnector {
 		return session;
 	}
 	
+	public Session getNewSession() {
+		return HibernateUtil.getSessionFactory().openSession();
+	}
+	
 	public static DatabaseConnector getInstance() {
 		if (instance==null) {
 			instance = new DatabaseConnector();
