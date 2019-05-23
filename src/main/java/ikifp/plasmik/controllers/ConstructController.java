@@ -136,7 +136,6 @@ public class ConstructController {
 			if ( dateString==null || dateString.isEmpty()) {
 				errorMessage = "please provide the date";
 				isValid = false ;
-				//dateString = format.format(todayDate);
 			} else {
 				try {
 					Date constructCreationDate = (Date)format.parse(dateString);
@@ -173,19 +172,9 @@ public class ConstructController {
 				constructService.updateConstruct(construct);
 			}
 						
-			// adding gene map in pdf file 
-			savingMapFile(mapFile, construct);
+			savingMapFile(mapFile, construct); // adding gene map in pdf file
 			
-			// save on disk file with sequence
-			try {
-				if (sequenceFile.getBytes().length > 0) {
-					savingFile(sequenceFile, construct);
-					constructService.updateConstruct(construct);
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				System.out.println("problem with saving seq file");
-			}
+			savingFile(sequenceFile, construct, constructService); // save on disk file with sequence
 			 
 			return "redirect:/constructs";
 		}else {
@@ -207,12 +196,13 @@ public class ConstructController {
 		}
 	}
 
-	private void savingFile(MultipartFile file, Construct construct) {
+	private void savingFile(MultipartFile file, Construct construct, ConstructService constructService) {
 		try {
 			byte[] sequenceFileBytes = file.getBytes();
 			if(sequenceFileBytes.length>0) {
 				String sequenceFile = pathInProject+((Long)construct.getId()).toString()+"_seq_"+construct.getConstructName()+"_"+file.getOriginalFilename();
 				construct.setSequenceFileName(sequenceFile);
+				constructService.updateConstruct(construct);
 				Path path = Paths.get(sequenceFile);
 				Files.write(path, sequenceFileBytes);			
 			}
@@ -294,8 +284,7 @@ public class ConstructController {
 			Construct construct = constructService.findConstructById(constructId);
 			try {
 				if (sequenceFile.getBytes().length > 0) {
-					savingFile(sequenceFile, construct);
-					constructService.updateConstruct(construct);
+					savingFile(sequenceFile, construct, constructService);
 					redirectAttributes.addAttribute("message", "sequence file added");
 				}
 			} catch (IOException e1) {
