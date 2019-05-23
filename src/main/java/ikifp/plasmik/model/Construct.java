@@ -48,9 +48,9 @@ public class Construct {
 	
 /*	@Column
 	private byte[] map;
-	
+	*/
 	@Column
-	private byte[] sequenceFile;*/
+	private String sequenceFileName;
 	
 	@Column
 	private String comment;
@@ -128,14 +128,14 @@ public class Construct {
 	public void setMap(byte[] map) {
 		this.map = map;
 	}
-
-	public byte[] getSequenceFile() {
-		return sequenceFile;
+*/
+	public String getSequenceFileName() {
+		return sequenceFileName;
 	}
 
-	public void setSequenceFile(byte[] sequenceFile) {
-		this.sequenceFile = sequenceFile;
-	}*/
+	public void setSequenceFileName(String sequenceFileName) {
+		this.sequenceFileName = sequenceFileName;
+	}
 
 	public Project getProject() {
 		return project;

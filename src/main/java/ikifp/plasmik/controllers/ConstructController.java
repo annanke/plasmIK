@@ -1,7 +1,6 @@
 package ikifp.plasmik.controllers;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +14,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,10 +55,12 @@ public class ConstructController {
 	
 	@RequestMapping(value = "/constructForm", method = RequestMethod.GET)
 	public String showEditConstruct(Model model, HttpSession session,
+			@RequestParam(value = "message", required=false) String message,
 			@RequestParam(value = "constructId", required=false) Long constructId,
 			RedirectAttributes redirectAttributes){
 		if (session.getAttribute("userDto")!=null) {
 			
+			model.addAttribute("message", message);
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			
 			if ( constructId != null) {
@@ -105,6 +107,7 @@ public class ConstructController {
 			@RequestParam(value = "comment", required=false) String comment,
 			@RequestParam(value="mapFile", required=false) MultipartFile mapFile,
 			@RequestParam(value="sequenceFile", required=false) MultipartFile sequenceFile,
+			RedirectAttributes redirectAttributes,
 			Model model, HttpSession session) {
 		
 		if (session.getAttribute("userDto")!=null) {
@@ -124,13 +127,48 @@ public class ConstructController {
 			construct.setComment(comment);
 			
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				construct.setDate((Date)format.parse(dateString));
-			} catch (ParseException e) {
-				 e.printStackTrace();
-				System.out.println("problem with date of construct");
+			Calendar today = Calendar.getInstance();
+			Date todayDate = today.getTime();
+			
+			boolean isValid = true;
+			String errorMessage = "";
+			
+			if ( dateString==null || dateString.isEmpty()) {
+				errorMessage = "please provide the date";
+				isValid = false ;
+				//dateString = format.format(todayDate);
+			} else {
+				try {
+					Date constructCreationDate = (Date)format.parse(dateString);
+					if ( !constructCreationDate.after(todayDate) ) {
+						construct.setDate(constructCreationDate);
+						isValid = true ;
+					
+					} else {
+						errorMessage = "you tried to create a construct from the future!!! try again with correct date";
+						isValid = false ;
+					}
+					
+				} catch (ParseException e) {
+					 e.printStackTrace();
+					System.out.println("problem with date of construct");
+				}
 			}
 			
+			if (isValid == false) {
+				Collection<User> usersList = userService.getAll();
+				model.addAttribute("usersList", usersList);
+				
+				Collection<Project> projectList = projectService.getAllProjects();
+				model.addAttribute("projectList", projectList);
+				
+				
+				model.addAttribute("message", errorMessage);
+				model.addAttribute("construct", construct);
+				model.addAttribute("creationDate", dateString);
+				return "addOrEditConstruct";
+			}
+					
 			if (constructId == null) {
 				constructService.addConstruct(construct);
 			} else {
@@ -152,8 +190,16 @@ public class ConstructController {
 			}
 			
 			// save on disk file with sequence
-			savingFile(sequenceFile, construct);
-	        
+			try {
+				if (sequenceFile.getBytes().length > 0) {
+					savingFile(sequenceFile, construct);
+					constructService.updateConstruct(construct);
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				System.out.println("problem with saving seq file");
+			}
+			 
 			return "redirect:/constructs";
 		}else {
 			return "redirect:/Start";
@@ -164,9 +210,11 @@ public class ConstructController {
 		try {
 			byte[] sequenceFileBytes = file.getBytes();
 			if(sequenceFileBytes.length>0) {
-				
-				Path path = Paths.get(pathInProject+((Long)construct.getId()).toString()+"_seq_"+construct.getConstructName()+"_"+file.getOriginalFilename());
+				String sequenceFile = pathInProject+((Long)construct.getId()).toString()+"_seq_"+construct.getConstructName()+"_"+file.getOriginalFilename();
+				construct.setSequenceFileName(sequenceFile);
+				Path path = Paths.get(sequenceFile);
 				Files.write(path, sequenceFileBytes);
+				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -255,13 +303,26 @@ public class ConstructController {
 	}
 	
 	@RequestMapping(value = "/downloadSequence", method = RequestMethod.GET)
-	public void downloadSequenceFile(Model model, HttpSession session,
-			@RequestParam(value = "constructId", required=true) long constructId){
-		if (session.getAttribute("userDto")!=null) {
+	public ResponseEntity<ByteArrayResource> downloadSequenceFile(Model model, HttpSession session,
+			@RequestParam(value = "constructId", required=true) long constructId) throws IOException {
+		
+		ConstructService constructService = new ConstructService();
+		Construct construct = constructService.findConstructById(constructId);
+		
+		Path path = Paths.get(construct.getSequenceFileName());
+		byte[] sequenceBytes = Files.readAllBytes(path);
+		ByteArrayResource sequenceByteArrayResource = new ByteArrayResource(sequenceBytes);
+		
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
+				.contentLength(sequenceBytes.length).body(sequenceByteArrayResource);
+/*		if (session.getAttribute("userDto")!=null) {
 			ConstructService constructService = new ConstructService();
 			Construct construct = constructService.findConstructById(constructId);
 			//TODO implement file downloading
-		}
+			return "constructDetails";
+		}else {
+			return "redirect:/Start";
+		}*/
 	}
 	
 
