@@ -48,17 +48,23 @@
 					</form>
 				</div>
 				
-				<form action="addSequence" method="GET" th:unless="${seqFileExist}">
+				<form action="addSequence" method="POST" enctype="multipart/form-data" th:unless="${seqFileExist}">
+					
+					<!--<label for="sequenceFile" >Upload a sequence file</label>
+					<input type="hidden" name="constructId" th:value="${construct.id}" />
+					<input type="file" id="sequenceFile" name="sequenceFile" multiple="multiple" /> 
+					<button class="btn btn-info" type="submit">Upload</button>-->
+					
 					<p>Upload a sequence file</p>	
 					<div class="form-control">
 						<label class="btn btn-outline-secondary" for="file-selector">
-	   					 	<input id="file-selector" type="file" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)">
+	   					 	<input id="file-selector"  name="sequenceFile" multiple="multiple" type="file" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)">
 	   				 		Browse
 						</label><br/>
 						<span class='label label-info' id="upload-file-info"></span>
 					</div>
 					<input type="hidden" name="constructId" th:value="${construct.id}" />
-					<button class="btn btn-info" type="submit">Upload</button>
+					<button class="btn btn-info" type="submit">Upload</button>  	
 
 				</form>				
 				
@@ -73,17 +79,18 @@
 			<div th:unless="${mapFileExist}">
 			
 				<p class="text-info lead">Upload map</p>
-<!--	  		<label for="mapFile">Upload map (pdf):</label>
-				<input type="file" id="mapFile" name="mapFile" multiple="multiple" /> -->
 						
-				<form class="pt-4" action="addMapFile" method="GET" >
-					<div class="form-control col-sm-8">
+				<form class="pt-4" action="addMapFile" method="POST" enctype="multipart/form-data">
+			 		<div class="form-control col-sm-8">
 						<label class="btn btn-outline-secondary" for="map-selector">
-	   					 	<input id="map-selector" type="file" accept=".pdf" style="display:none" onchange="$('#upload-map-info').html(this.files[0].name)">
+	   					 	<input id="map-selector" type="file" name="mapFile" multiple="multiple" accept=".pdf" style="display:none" onchange="$('#upload-map-info').html(this.files[0].name)">
 	   				 		 Browse 
 						</label><br/>
 						<span class='label label-info' id="upload-map-info"></span>
-					</div>
+					</div> 
+					<!-- simple version: -->
+					<!-- <label for="mapFile">Upload map (pdf):</label>
+					<input type="file" id="mapFile" name="mapFile" multiple="multiple" /> -->
  					<input type="hidden" name="constructId" th:value="${construct.id}" /> 		 
 					<button class="btn btn-info" type="submit">Add map</button>
 				</form>

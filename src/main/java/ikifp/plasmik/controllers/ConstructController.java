@@ -158,11 +158,8 @@ public class ConstructController {
 			if (isValid == false) {
 				Collection<User> usersList = userService.getAll();
 				model.addAttribute("usersList", usersList);
-				
 				Collection<Project> projectList = projectService.getAllProjects();
 				model.addAttribute("projectList", projectList);
-				
-				
 				model.addAttribute("message", errorMessage);
 				model.addAttribute("construct", construct);
 				model.addAttribute("creationDate", dateString);
@@ -177,17 +174,7 @@ public class ConstructController {
 			}
 						
 			// adding gene map in pdf file 
-			try {
-				//TODO check if it is pdf file!
-				byte[] mapFileBytes = mapFile.getBytes();
-				if(mapFileBytes.length>0) {
-					Path path = Paths.get(pathInProject+((Long)construct.getId()).toString()+"_map_"+constructName+".pdf");
-					Files.write(path, mapFileBytes);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("problem with saving map file");
-			}
+			savingMapFile(mapFile, construct);
 			
 			// save on disk file with sequence
 			try {
@@ -206,6 +193,20 @@ public class ConstructController {
 		}
 	}
 
+	private void savingMapFile(MultipartFile mapFile, Construct construct) {
+		try {
+			//TODO check if it is pdf file!
+			byte[] mapFileBytes = mapFile.getBytes();
+			if(mapFileBytes.length>0) {
+				Path path = Paths.get(pathInProject+((Long)construct.getId()).toString()+"_map_"+construct.getConstructName()+".pdf");
+				Files.write(path, mapFileBytes);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("problem with saving map file");
+		}
+	}
+
 	private void savingFile(MultipartFile file, Construct construct) {
 		try {
 			byte[] sequenceFileBytes = file.getBytes();
@@ -213,8 +214,7 @@ public class ConstructController {
 				String sequenceFile = pathInProject+((Long)construct.getId()).toString()+"_seq_"+construct.getConstructName()+"_"+file.getOriginalFilename();
 				construct.setSequenceFileName(sequenceFile);
 				Path path = Paths.get(sequenceFile);
-				Files.write(path, sequenceFileBytes);
-				
+				Files.write(path, sequenceFileBytes);			
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -254,8 +254,6 @@ public class ConstructController {
 			//File dir = new File(directory);
 			//File[] files = dir.listFiles((dir1, name) -> name.startsWith("temp") && name.endsWith(".txt"));
 			File dir = new File(pathInProject);
-			
-			
 			File[] seqFileList = dir.listFiles((dir1, name) -> name.startsWith(((Long)construct.getId()).toString()+"_seq_"+construct.getConstructName()));
 			
 			model.addAttribute("seqFileExist", seqFileList.length>0);
@@ -285,7 +283,7 @@ public class ConstructController {
 		return response;
 	}
 	
-	@RequestMapping(value = "/addSequence", method = RequestMethod.GET)
+	@RequestMapping(value = "/addSequence", method = RequestMethod.POST)
 	public String addSequenceFile(
 			@RequestParam(value = "sequenceFile", required=false) MultipartFile sequenceFile,
 			@RequestParam(value = "constructId", required=true) long constructId,
@@ -294,8 +292,18 @@ public class ConstructController {
 		if (session.getAttribute("userDto")!=null) {
 			ConstructService constructService = new ConstructService();
 			Construct construct = constructService.findConstructById(constructId);
-			savingFile(sequenceFile, construct);
-			redirectAttributes.addAttribute("message", "sequence file added");
+			try {
+				if (sequenceFile.getBytes().length > 0) {
+					savingFile(sequenceFile, construct);
+					constructService.updateConstruct(construct);
+					redirectAttributes.addAttribute("message", "sequence file added");
+				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				System.out.println("problem with saving seq file");
+				redirectAttributes.addAttribute("message", "problem with saving seq file");
+			}
+			redirectAttributes.addAttribute("constructId", constructId);
 			return "redirect:/constructDetails";
 		}else {
 			return "redirect:/Start";
@@ -323,6 +331,24 @@ public class ConstructController {
 		}else {
 			return "redirect:/Start";
 		}*/
+	}
+	
+	@RequestMapping(value = "/addMapFile", method = RequestMethod.POST)
+	public String addMapFile(
+			@RequestParam(value = "mapFile", required=false) MultipartFile mapFile,
+			@RequestParam(value = "constructId", required=true) long constructId,
+			Model model, HttpSession session,
+			RedirectAttributes redirectAttributes){
+		if (session.getAttribute("userDto")!=null) {
+			ConstructService constructService = new ConstructService();
+			Construct construct = constructService.findConstructById(constructId);
+			
+			savingMapFile(mapFile, construct);
+			redirectAttributes.addAttribute("constructId", constructId);
+			return "redirect:/constructDetails";
+		}else {
+			return "redirect:/Start";
+		}
 	}
 	
 
