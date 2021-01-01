@@ -135,4 +135,48 @@ public class UserController {
 			return "redirect:/Start";
 		}
 	}
+	
+	@RequestMapping(value = "/changePass", method = RequestMethod.POST)
+	public String changePassword(
+		HttpSession session) {
+		if (session.getAttribute("userDto")!=null) {
+			UserService userService = new UserService();
+			
+			return "redirect:/users";
+		}
+		else {
+			return "redirect:/Start";
+		} 
+	}
+	
+	@RequestMapping(value = "/RegistrationForm", method = RequestMethod.POST)
+	public String registerUser(
+			@RequestParam(value = "name", required=true) String name, 
+//			@RequestParam(value = "login", required=true) String login,
+			@RequestParam(value = "password", required=true) String password, 
+			@RequestParam(value = "email", required=true) String email,
+			RedirectAttributes redirectAttributes,
+			Model model, HttpSession session) {
+		
+		if (session.getAttribute("userDto")!=null) {
+			UserService userService = new UserService();
+			if (userService.findUserByEmail(email)==null) {
+				User newUser = new User();
+				newUser.setName(name);
+				//newUser.setLogin(login);
+				newUser.setEmail(email);
+				newUser.setPassword(password);
+								
+				userService.addUser(newUser);
+				redirectAttributes.addAttribute("message", "user created");
+				return "redirect:/users";
+			}else {
+				redirectAttributes.addAttribute("message", "user with the given address: '"+email+"' already exists");
+				return "redirect:/showAddUserForm";
+			}
+		}
+		else {
+			return "redirect:/Start";
+		}
+	}
 }

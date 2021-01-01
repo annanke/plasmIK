@@ -5,7 +5,7 @@
 
     <div layout:fragment="content"> 
     <div class="container">
-    	<h4 class="text-info"> add new user </h4>
+    	<h4 class="text-info"> Welcome! </h4>
     	<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
     	<br/>
     		<div class="form-group border border-primary rounded px-2">
@@ -28,7 +28,7 @@
 					/*]]>*/
 				</script>
 				
-				<form action="addUserForm" method="post">
+				<form action="registerUser" method="post">
 						<div class="w-50 m-3">
 							<label for="nameInput">Name</label>
 							<input type="text" name="name" value="" class="form-control" id="nameInput" placeholder="enter name"/>
@@ -55,7 +55,7 @@
 							
 						</div>
 						
-						<button type="submit" class="btn btn-primary">Add user</button>
+						<button type="submit" class="btn btn-primary">Register</button>
 				</form>
 					
 			</div>

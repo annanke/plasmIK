@@ -1,6 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
+<head>
+	<script th:inline="javascript">
+		function confirmDelete(name, constructCount){
+			return confirm("Do you really want to delete: " + name + " together with its " + constructCount + " constructs?");
+		}
+	</script>
+</head>
+
 <body>
 
     <div layout:fragment="content">
@@ -39,7 +47,7 @@
 								
 								<form class="d-inline p-2" action="deleteProject" method="POST" th:if="${session.userDto.isadmin}==true" >
 									<input type="hidden" name="projectId" th:value="${project.id}" />
-									<button class="btn btn-warning" type="submit">Delete</button>
+									<button class="btn btn-warning" th:onclick="'return confirmDelete(\''+${project.projectName}+'\','+${project.numberOfConstructs}+')'" type="submit">Delete</button>
 								</form>
 							</div>
 						</td>

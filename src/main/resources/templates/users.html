@@ -1,8 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout">
+<head>
+	<script th:inline="javascript">
+		function confirmDelete(userName){
+		return confirm("Do you really want to delete user: " + userName +"?");
+		}
+	</script>
+</head>
 <body>
 
+	
 	<div layout:fragment="content">
 		<div th:include="menuFragment"></div>
 		<!-- 		<p class="lead" th:if="${message}"><span th:text="${message}" style='color: #aa0'/></p>
@@ -39,7 +47,8 @@
 								</form>
 								<form class="d-inline p-2" action="deleteUser" method="POST" th:if="${session.userDto.isadmin}==true" >
 									<input type="hidden" name="userId" th:value="${user.id}" />
-									<button class="btn btn-warning" type="submit">Delete</button>
+									<button class="btn btn-warning" th:onclick="'return confirmDelete(\''+${user.name}+'\')'" type="submit">Delete</button>
+							<!--		<button class="btn btn-warning" type="submit">Delete</button> -->
 								</form>
 
 							</div>
@@ -51,6 +60,6 @@
 			</table>
 		</div>
 	</div>
-
+	
 </body>
 </html>

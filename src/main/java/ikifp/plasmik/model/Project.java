@@ -1,5 +1,7 @@
 package ikifp.plasmik.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,6 +22,20 @@ public class Project {
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
+
+	@OneToMany(mappedBy="project")  
+	private Set<Construct> constructs;
+	
+	@Transient
+	private Long numberOfConstructs;
+	
+	public Long getNumberOfConstructs() {
+		return numberOfConstructs;
+	}
+
+	public void setNumberOfConstructs(Long numberOfConstructs) {
+		this.numberOfConstructs = numberOfConstructs;
+	}
 
 	public long getId() {
 		return id;
@@ -44,5 +60,11 @@ public class Project {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	public Set<Construct> getConstructs() {
+		return constructs;
+	}
 
+	public void setConstructs(Set<Construct> constructs) {
+		this.constructs = constructs;
+	}
 }
