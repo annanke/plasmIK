@@ -1,5 +1,7 @@
 package ikifp.plasmik.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,6 +36,12 @@ public class User {
 	@Column
 	private boolean isadmin;
 
+	@OneToMany(mappedBy="user")  
+	private Set<Project> projects;
+	
+	@Transient
+	private Long numberOfProjects;
+	
 	//Gettery i settery:
 	public long getId() {
 		return id;
@@ -82,6 +90,22 @@ public class User {
 
 	public void setIsadmin(boolean isadmin) {
 		this.isadmin = isadmin;
+	}
+
+	public Set<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(Set<Project> projects) {
+		this.projects = projects;
+	}
+
+	public Long getNumberOfProjects() {
+		return numberOfProjects;
+	}
+
+	public void setNumberOfProjects(Long numberOfProjects) {
+		this.numberOfProjects = numberOfProjects;
 	}
 	
 }

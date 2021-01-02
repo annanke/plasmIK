@@ -14,12 +14,15 @@ public class UserDto {
 	
 	private boolean isadmin;
 	
+	private Long numberOfProjects;
+	
 	public UserDto(User user) {
 		this.setId(user.getId());
 		this.setEmail(user.getEmail());
 		this.setName(user.getName());
 		//this.setLogin(user.getLogin());
 		this.setIsadmin(user.getIsadmin());
+		this.setNumberOfProjects(user.getNumberOfProjects());
 	}
 
 	public long getId() {
@@ -60,5 +63,13 @@ public class UserDto {
 
 	public void setIsadmin(boolean isadmin) {
 		this.isadmin = isadmin;
+	}
+
+	public Long getNumberOfProjects() {
+		return numberOfProjects;
+	}
+
+	public void setNumberOfProjects(Long numberOfProjects) {
+		this.numberOfProjects = numberOfProjects;
 	}
 }

@@ -1,5 +1,6 @@
 package ikifp.plasmik.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,8 +24,20 @@ public class UserService {
 
 	public Collection<User> getAll() {
 		Session newSession = connector.getNewSession();
+		
+		Collection<Object[]> queryResult = null;
+		Collection<User> usersList = new ArrayList<User>();
+		
 		try {
-			return newSession.createCriteria(User.class).list();
+			String hql = "SELECT U, count(P.id ) FROM User U LEFT JOIN U.projects P GROUP BY (U)";
+			queryResult = newSession.createQuery(hql).list();
+			for (Object[] element : queryResult) {
+				User user = (User) element[0];
+				user.setNumberOfProjects((Long) element[1]);
+				usersList.add(user);
+			}		
+			return usersList;
+			//return newSession.createCriteria(User.class).list();
 		} finally {
 			newSession.close();
 		}

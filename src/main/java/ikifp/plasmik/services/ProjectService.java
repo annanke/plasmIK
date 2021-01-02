@@ -25,25 +25,22 @@ public class ProjectService {
 	public Collection<Project> getAllProjects() {
 		Session newSession = connector.getNewSession();
 		
-		Collection<Object[]> test = null; //dod
+		Collection<Object[]> queryResult = null; 
 		Collection<Project> projectsList = new ArrayList<Project>();
 
 		try {
 			String hql = "SELECT P, count(C.id ) FROM Project P LEFT JOIN P.constructs C GROUP BY (P)";
-			test = newSession.createQuery(hql).list();
-			for (Object[] element : test) {
+			queryResult = newSession.createQuery(hql).list();
+			for (Object[] element : queryResult) {
 				Project project = (Project) element[0];
 				project.setNumberOfConstructs((Long) element[1]);
 				projectsList.add(project);
-				
-			}
-			//test = newSession.createCriteria(Project.class).list();
+			}		
+			return projectsList;
 			//return newSession.createCriteria(Project.class).list();
 		}finally{
 			newSession.close();
 		}
-		
-		return projectsList; //dod
 	}
 
 	public Project findProjectByName(String projectName) {

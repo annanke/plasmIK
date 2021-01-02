@@ -10,7 +10,7 @@
 		$(document).ready( function(){
 			$('#exampleModal').on('show.bs.modal', function (event) {
 			  var button = $(event.relatedTarget); // Button that triggered the modal
-			  var projectId = button.data('projectid'); // Extract info from data-* attributes
+			  var projectId = button.data('projectid');
 			  var projectName = button.data('projectname'); 
 			  var projectNumberOfConstructs = button.data('projectnumberofconstructs');		  
 			  var modal = $(this);
@@ -100,8 +100,7 @@
 									th:if="${session.userDto.isadmin}==true" data-toggle="modal"
 									data-target="#exampleModal" th:data-projectid="${project.id}"
 									th:data-projectname="${project.projectName}"
-									th:data-projectnumberofconstructs="${project.numberOfConstructs}">Delete
-									with modal</button>
+									th:data-projectnumberofconstructs="${project.numberOfConstructs}">Delete with modal</button>
 							</div>
 						</td>
 					</tr>
