@@ -23,7 +23,7 @@ public class Project {
 	@JoinColumn(name="user_id")
 	private User user;
 
-	@OneToMany(mappedBy="project")  
+	@OneToMany(mappedBy="project", cascade=CascadeType.ALL)  
 	private Set<Construct> constructs;
 	
 	@Transient

@@ -1,9 +1,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
+
+<head>
+<script th:inline="javascript">
+		
+		$(document).ready( function(){
+			$('#exampleModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget); // Button that triggered the modal
+			  var constructId = button.data('constructid');
+			  var constructName = button.data('constructname'); 
+			  var modal = $(this);
+			  modal.find('.modal-title').text('Deleting ' + constructName);
+			  modal.find('.modal-body p').text("Do you really want to delete: " + constructName + "?");
+			  modal.find('#constructID').val(constructId);
+			})
+		});
+		
+	</script>
+</head>
+
 <body>
 
   <div layout:fragment="content">
+    
+        <!-- Modal window -->
+		<div class="modal fade" id="exampleModal" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<form class="d-inline p-2" action="deleteConstruct" method="POST">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Title</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>Deleting construct information</p>
+							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"	data-dismiss="modal">Cancel</button>
+														
+							<button type="submit" class="btn btn-primary">Delete construct</button>
+							<input id="constructID" type="hidden" name="constructId" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
         
 	<div th:include="menuFragment"></div> 
     <div class="container">
@@ -33,10 +80,15 @@
 							<button class="btn btn-info btn-block" type="submit">Edit</button>
 					</form>
 									
-					<form action="deleteConstruct" method="POST"  th:if="${session.userDto.isadmin}==true or ${construct.user.email}==${session.userDto.email}">
+<!-- 					<form action="deleteConstruct" method="POST"  th:if="${session.userDto.isadmin}==true or ${construct.user.email}==${session.userDto.email}">
 							<input type="hidden" name="constructId" th:value="${construct.id}" />
 							<button class="btn btn-warning btn-block" type="submit">Delete</button>
 					</form>
+					 -->
+					<button type="button" class="btn btn-warning"
+						th:if="${session.userDto.isadmin}==true or ${construct.user.email}==${session.userDto.email}" data-toggle="modal"
+						data-target="#exampleModal" th:data-constructid="${construct.id}"
+						th:data-constructname="${construct.constructName}">Delete with modal</button>
 					<br/>
 				</div>
 				

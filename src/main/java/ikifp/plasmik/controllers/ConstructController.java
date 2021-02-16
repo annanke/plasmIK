@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.SortOrder;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -41,10 +43,22 @@ public class ConstructController {
 	String pathInProject = "src/main/resources/static/files/";
 	
 	@RequestMapping(value="/constructs", method=RequestMethod.GET)
-	private String getAllConstructs(@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
+	private String getAllConstructs(@RequestParam(value = "message", required=false) String message, 
+			@RequestParam(value = "sortByProperty", required=false, defaultValue="constructName") String sortByProperty,
+			@RequestParam(value = "selectedOrder", required=false, defaultValue="ASCENDING") SortOrder selectedOrder,
+			Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
+			
+/*			if (sortByProperty==null) {
+				sortByProperty = "constructName";
+			}
+			
+			if (selectedOrder==null) {
+				selectedOrder = SortOrder.ASCENDING;
+			}*/
+			model.addAttribute("nextSortOrder", selectedOrder==SortOrder.ASCENDING?SortOrder.DESCENDING:SortOrder.ASCENDING);
 			ConstructService constructService = new ConstructService();
-			Collection<Construct> constructsList = constructService.getAllConstructs();
+			Collection<Construct> constructsList = constructService.getAllConstructs(sortByProperty, selectedOrder);
 			model.addAttribute("constructsList", constructsList);
 			model.addAttribute("message", message);
 			return "constructs";
@@ -173,7 +187,7 @@ public class ConstructController {
 			}
 						
 			savingMapFile(mapFile, construct); // adding gene map in pdf file
-			
+			//TODO: poprawic zeby nadpisywal plik przy edycji konstruktu jesli dodany!
 			savingFile(sequenceFile, construct, constructService); // save on disk file with sequence
 			 
 			return "redirect:/constructs";
@@ -188,7 +202,7 @@ public class ConstructController {
 			byte[] mapFileBytes = mapFile.getBytes();
 			if(mapFileBytes.length>0) {
 				Path path = Paths.get(pathInProject+((Long)construct.getId()).toString()+"_map_"+construct.getConstructName()+".pdf");
-				Files.write(path, mapFileBytes);
+				Files.write(path, mapFileBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -204,7 +218,7 @@ public class ConstructController {
 				construct.setSequenceFileName(sequenceFile);
 				constructService.updateConstruct(construct);
 				Path path = Paths.get(sequenceFile);
-				Files.write(path, sequenceFileBytes);			
+				Files.write(path, sequenceFileBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);			
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

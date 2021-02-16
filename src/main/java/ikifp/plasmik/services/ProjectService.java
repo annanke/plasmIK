@@ -3,6 +3,7 @@ package ikifp.plasmik.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.management.Query;
 
@@ -11,6 +12,7 @@ import org.hibernate.Session;
 
 import org.hibernate.Transaction;
 
+import ikifp.plasmik.model.Construct;
 import ikifp.plasmik.model.Project;
 import ikifp.plasmik.model.User;
 import ikifp.plasmik.persistence.DatabaseConnector;
@@ -82,9 +84,21 @@ public class ProjectService {
 		Transaction transaction = null;
 		try {
 			Project project = (Project)newSession.get(Project.class, projectId);
+			Set<Construct> constructs = project.getConstructs();
+			ArrayList<Long> constructsIDs = new ArrayList<>();
+			for (Construct construct : constructs) {
+				constructsIDs.add(construct.getId());
+			}
+			
 			transaction = newSession.beginTransaction();
 			newSession.delete(project);
 			transaction.commit();
+			
+			ConstructService constructService = new ConstructService();
+			for (Long id : constructsIDs) {
+				constructService.deleteConstructFiles(id);
+			}
+			
 		} catch (Exception e){
 			if (transaction != null) {
 				transaction.rollback();
