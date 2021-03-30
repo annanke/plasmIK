@@ -3,6 +3,7 @@ package ikifp.plasmik.controllers;
 import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.SortOrder;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +21,18 @@ import ikifp.plasmik.services.UserService;
 public class ProjectCotroller {
 	
 	@RequestMapping(value="/projects", method=RequestMethod.GET)
-	private String getAllProjects(@RequestParam(value = "message", required=false) String message, Model model, HttpSession session) {
+	private String getAllProjects(@RequestParam(value = "message", required=false) String message, 
+			@RequestParam(value= "sortByProperty", required=false, defaultValue="projectName") String sortByProperty,
+			@RequestParam(value= "selectedOrder", required=false, defaultValue="ASCENDING") SortOrder selectedOrder,
+			Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
+			
+			model.addAttribute("nextSortOrder", selectedOrder==selectedOrder.ASCENDING?selectedOrder.DESCENDING:selectedOrder.ASCENDING);
 			ProjectService projectService = new ProjectService();
-			Collection<Project> projectsList = projectService.getAllProjects();
+			Collection<Project> projectsList = projectService.getAllProjects(sortByProperty, selectedOrder);
 			model.addAttribute("projectsList", projectsList);
 			model.addAttribute("message", message);
+			
 			return "projects";
 		}
 		else {

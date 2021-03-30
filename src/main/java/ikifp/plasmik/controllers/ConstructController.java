@@ -49,13 +49,17 @@ public class ConstructController {
 			Model model, HttpSession session) {
 		if (session.getAttribute("userDto")!=null) {
 			
-/*			if (sortByProperty==null) {
+/*		//inna wersja przed wykorzystaniem atrybutu default value:
+ * 	if (sortByProperty==null) {
 				sortByProperty = "constructName";
 			}
 			
 			if (selectedOrder==null) {
+				
+				+
 				selectedOrder = SortOrder.ASCENDING;
 			}*/
+			
 			model.addAttribute("nextSortOrder", selectedOrder==SortOrder.ASCENDING?SortOrder.DESCENDING:SortOrder.ASCENDING);
 			ConstructService constructService = new ConstructService();
 			Collection<Construct> constructsList = constructService.getAllConstructs(sortByProperty, selectedOrder);

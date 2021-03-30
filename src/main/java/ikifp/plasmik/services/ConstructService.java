@@ -11,6 +11,7 @@ import javax.swing.SortOrder;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 
+import ikifp.plasmik.helpers.CriteriaHelper;
 import ikifp.plasmik.model.Construct;
 import ikifp.plasmik.model.Project;
 import ikifp.plasmik.persistence.DatabaseConnector;
@@ -31,20 +32,8 @@ public class ConstructService {
 		Session newSession = connector.getNewSession();
 		
 		try {
-			Order order = null;
-			
-			switch (selectedOrder) {
-			case ASCENDING :
-				order = Order.asc(sortByProperty);
-				break;
+			Order order = CriteriaHelper.sort(sortByProperty, selectedOrder);
 
-			case DESCENDING :
-				order = Order.desc(sortByProperty);
-				break;
-			default:
-				order = Order.asc(sortByProperty);
-				break;
-			}
 			Criteria criteriaOrdered = newSession.createCriteria(Construct.class).addOrder(order);
 			
 			return criteriaOrdered.list();

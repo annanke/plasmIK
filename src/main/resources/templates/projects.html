@@ -71,8 +71,15 @@
 			<table class="table table-striped table-hover">
 				<thead class="thead-dark">
 					<tr>
-						<th>Project name</th>
-						<th>Owner</th>
+						<th><form class="d-inline p-2" action="projects" method="GET">
+							<input type="hidden" name="sortByProperty" value="projectName"/>
+							<input type="hidden" name="selectedOrder" th:value="${nextSortOrder}"/>
+							<button  class="btn btn-dark" type="submit">Project name</button>
+						</form></th>
+						<th><form class="d-inline p-2" action="projects" method="GET">
+							<input type="hidden" name="sortByProperty" value="user"/>
+							<input type="hidden" name="selectedOrder" th:value="${nextSortOrder}"/>
+							<button  class="btn btn-dark" type="submit">Owner</button></th>
 						<th></th>
 					</tr>
 				</thead>

@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import javax.management.Query;
+import javax.swing.SortOrder;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import org.hibernate.Transaction;
 
+import ikifp.plasmik.helpers.CriteriaHelper;
 import ikifp.plasmik.model.Construct;
 import ikifp.plasmik.model.Project;
 import ikifp.plasmik.model.User;
@@ -24,14 +26,15 @@ public class ProjectService {
 		 connector= DatabaseConnector.getInstance();
 	 }
 
-	public Collection<Project> getAllProjects() {
+	public Collection<Project> getAllProjects(String sortByProperty, SortOrder selectedOrder) {
 		Session newSession = connector.getNewSession();
 		
 		Collection<Object[]> queryResult = null; 
 		Collection<Project> projectsList = new ArrayList<Project>();
 
 		try {
-			String hql = "SELECT P, count(C.id ) FROM Project P LEFT JOIN P.constructs C GROUP BY (P)";
+			String sqlOrder = CriteriaHelper.getOrderCommand(selectedOrder);
+			String hql = "SELECT P, count(C.id ) FROM Project P LEFT JOIN P.constructs C GROUP BY (P) ORDER BY P."+sortByProperty+" "+sqlOrder;
 			queryResult = newSession.createQuery(hql).list();
 			for (Object[] element : queryResult) {
 				Project project = (Project) element[0];
@@ -45,6 +48,10 @@ public class ProjectService {
 		}
 	}
 
+	public Collection<Project> getAllProjects(){
+		return 	getAllProjects("projectName", SortOrder.ASCENDING);
+	}
+	
 	public Project findProjectByName(String projectName) {
 		Session newSession = connector.getNewSession();
 		try {
